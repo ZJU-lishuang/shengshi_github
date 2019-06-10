@@ -114,7 +114,7 @@ def convert(xml_dir, json_file):
 if __name__ == '__main__':
     folder_list= ["train","val","test"]
     #注意更改base_dir为本地实际图像和标注文件路径
-    base_dir = "/home/lishuang/Disk/data/test" 
+    base_dir = "/home/lishuang/Disk/dukto/gangzhuao_xianchang_1" 
     xml_dir = base_dir + "/Annotations/"
     json_dir = base_dir + "/instances_" + "test" + ".json"
     """
