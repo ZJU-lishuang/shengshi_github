@@ -1,0 +1,24 @@
+网站指南 https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/
+
+
+指令：
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/
+
+conda config --set show_channel_urls yes
+
+
+注意：
+conda install pytorch torchvision cudatoolkit=9.0 -c pytorch
+其中，-c pytorch参数指定了conda获取pytorch的channel,在此指定为conda自带的pytorch仓库。
+因此，只需要将-c pytorch语句去掉，就可以使用清华镜像源快速安装pytorch了。
+
+
+
+显示配置的源
+conda config --show channels
+
+
+

@@ -1,0 +1,14 @@
+#success
+conda install pytorch torchvision=0.2.2 cudatoolkit=10.0
+
+#success   use this shell
+conda install pytorch torchvision cudatoolkit=10.0
+
+#fail
+conda install -c pytorch pytorch-nightly torchvision cudatoolkit=9.0
+
+#fail
+conda install pytorch torchvision=0.2.2 cudatoolkit=9.0
+
+结论：cudatoolkit需要安装和电脑一样版本的驱动。
+

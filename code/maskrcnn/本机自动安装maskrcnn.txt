@@ -1,0 +1,7 @@
+source autosetup.txt
+或
+source autosetup.sh
+自动安装markrcnn
+
+使用sh autosetup.sh不成功，因为创建虚拟环境后不能自动进入。
+cuda版本应该和驱动版本一致。

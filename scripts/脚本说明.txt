@@ -4,3 +4,8 @@ voc_to_coco_xml.py
 coco_keypoint文件夹
 在coco数据集上，把关键点打印到图片上。参考cocoapi的使用。
 网址 https://github.com/cocodataset/cocoapi
+
+
+
+convert_labelme_json_to_coco.py
+将labelme标注的单个关键点json文件转为coco格式关键点json文件。
