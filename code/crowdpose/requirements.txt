@@ -1,0 +1,13 @@
+cython
+h5py
+scipy==1.1.0
+pycocotools
+tensorboardx
+visdom
+nibabel
+pandas
+tqdm
+matplotlib
+opencv-python
+
+

@@ -1,0 +1,36 @@
+训练集默认coco，17个点，自己的数据集，14个点，也参照coco格式
+#将labelme标注的json文件转为h5格式
+convert_labelme_json_to_h5.py
+
+train_sppe/src/utils/dataset/coco.py修改
+#关键点个数
+self.nJoints = 14
+#对称的关键点，翻转后左右互换
+self.flipRef = ((2, 8), (3, 9), (4, 10),
+                (5, 11), (6, 12), (7, 13))
+#关键点索引
+self.accIdxs = (1, 2, 3, 4, 5, 6, 7, 8,
+                9, 10, 11, 12, 13, 14)
+#自己图片路径
+self.img_folder = '../data/coco/myimages' 
+#自己转换好的标注文件路径，和训练集验证集分割
+with h5py.File('../data/coco/mydataset.h5', 'r') as annot:
+            # train
+            self.imgname_coco_train = annot['imgname'][:]
+            self.bndbox_coco_train = annot['bndbox'][:]
+            self.part_coco_train = annot['part'][:]
+            # val
+            self.imgname_coco_val = annot['imgname'][:]
+            self.bndbox_coco_val = annot['bndbox'][:]
+            self.part_coco_val = annot['part'][:]
+
+train_sppe/src/utils/pose.py修改
+#关键点个数
+nJoints_coco=17改为nJoints_coco=14
+#关键点个数
+for i in range(17):改为for i in range(14):
+#根据关键点个数等比例修改
+if jointNum > 13 and train:改为if jointNum > 11 and train:
+
+#训练指令 路径train_sppe/src/中
+python train.py --dataset coco --expID exp1 --nClasses 14 --LR 1e-4 --nEpochs 500 --trainBatch 8

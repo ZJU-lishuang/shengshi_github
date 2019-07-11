@@ -1,0 +1,34 @@
+#创建虚拟环境
+conda create -n crowdpose
+
+#python3.7报错：安装不了torch0.4.0
+# torchvision0.3.0可能会报错：AttributeError: module 'torch.nn' has no attribute 'ModuleDict'
+#安装pytorch，torchvison=0.2.2需要pytorch>=1.0.0，torchvison=0.2.1需要pytorch>=0.4,python<3.7
+#cudatoolkit版本要和实际驱动相同，否则有可能会报错
+conda install pytorch=1.0.1 torchvision cudatoolkit=10.0
+
+#安装项目依赖，-i使用清华源加速
+pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple some-package
+
+#cython可能安装不成功，可以手动安装,或requirements中将opencv-python放在最后面（提供了修改好了的requirements.txt）
+pip install cython
+
+#scipy的imread在1.12中被移除了，安装scipy低版本
+pip install scipy==1.1.0
+
+#训练需要注销cudnn中batch_norm功能，1194和1254是functional.py中要注销的行数。根据自己的pytorch确定行数
+#PYTORCH=/path/to/pytorch
+#for pytorch v0.4.0
+sed -i "1194s/torch.backends.cudnn.enabled/False/g" ${PYTORCH}/torch/nn/functional.py
+
+#for pytorch v0.4.1
+sed -i "1254s/torch.backends.cudnn.enabled/False/g" ${PYTORCH}/torch/nn/functional.py
+
+#for pytorch v1.0.1
+sed -i "1623s/torch.backends.cudnn.enabled/False/g" ${PYTORCH}/torch/nn/functional.py
+
+#测试环境安装成功(需下载模型)
+python demo.py --indir examples/demo/ --outdir examples/res
+
+#训练环境安装成功（需下载coco2017数据集）
+python train.py --dataset coco --expID exp1 --nClasses 17 --LR 1e-4 --nEpochs 500 --trainBatch 8

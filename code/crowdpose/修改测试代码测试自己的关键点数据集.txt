@@ -1,0 +1,80 @@
+SPPE/src/main_fast_inference.py修改
+#关键点个数修改
+17改为14
+#路径修改
+print('Loading pose model from {}'.format('./models/sppe/model_385.pkl'))
+model.load_state_dict(torch.load('./models/sppe/model_385.pkl'))
+
+#matching.py中，关键点个数修改，17改为14；json文件信息添加矩形框坐标
+final_result.append({
+            'keypoints': final_pose,
+            'kp_score': final_score,
+            'proposal_score': mean_score + max_score + person['bbox_score'],
+            'bbox':person['bbox']   #new
+        })
+
+
+#dataloader.py中DataWriter类update函数中添加图片尺寸size信息
+result = {
+	'imgname': im_name,
+	'result': result,
+	'size':[orig_img.shape[0],orig_img.shape[1]]  #new
+	}
+
+
+#测试代码
+python demo.py --indir examples/demo/ --outdir examples/res --nClasses 14 --save_img --matching
+
+
+#fn.py中vis_frame函数修改，3个list根据关键点修改
+l_pair = [
+            (1, 0), (2, 1), (3, 2), (4, 3),
+            (5, 2), (6, 5), (7, 6), (8, 1), (9, 8),
+            (10, 9), (11, 5),
+            (11, 8), (12, 11), (13, 12)
+        ]
+p_color = [(0, 255, 255),#head
+                    (77,255,255), (77, 255, 204), (77,204,255), (191, 255, 77), (77,191,255), (191, 255, 77), #LShoulder, RShoulder, LElbow, RElbow, LWrist, RWrist
+                    (204,77,255), (77,255,204), (191,77,255), (77,255,191), (127,77,255), (77,255,127), (0, 255, 255)] #LHip, RHip, LKnee, Rknee, LAnkle, RAnkle, Neck
+line_color = [(0, 215, 255), (0, 255, 204), (0, 134, 255), (0, 255, 50),
+                    (77,255,222), (77,196,255), (77,135,255), (191,255,77), (77,255,77),
+                    (77,222,255), (255,156,127),
+                    (0,127,255), (255,127,77), (0,77,255)]
+
+#注释掉下面两行，这两句是通过双肩计算脖子的
+#kp_preds = torch.cat((kp_preds, torch.unsqueeze((kp_preds[5,:]+kp_preds[6,:])/2,0)))
+#kp_scores = torch.cat((kp_scores, torch.unsqueeze((kp_scores[5,:]+kp_scores[6,:])/2,0)))
+
+
+------------------------
+#dataloader.py中DetectionProcessor类update函数
+#在inp = im_to_torch(cv2.cvtColor(orig_img, cv2.COLOR_BGR2RGB))前添加代码,使用json中的矩形框而不是检测的矩形框
+		filepath, tmpfilename = os.path.split(im_name)
+                shotname, extension = os.path.splitext(tmpfilename)
+                re=search('/home/lishuang/Disk/shengshi_data/					   split_folder_for_train/',shotname+'.json')
+                json_ann = json.load(open(re[0]))
+                objects_anns = json_ann['objects']
+                _boxes=[]
+                _scores=[]
+                inps = torch.zeros(len(objects_anns), 3, opt.inputResH, opt.inputResW)
+                pt1 = torch.zeros(len(objects_anns), 2)
+                pt2 = torch.zeros(len(objects_anns), 2)
+                for objects_ann in objects_anns:
+                    xmin=min(objects_ann['keypoints'][0][0],objects_ann['keypoints'][1][0])
+                    xmax = max(objects_ann['keypoints'][0][0], objects_ann['keypoints'][1][0])
+                    ymin = min(objects_ann['keypoints'][0][1], objects_ann['keypoints'][1][1])
+                    ymax = max(objects_ann['keypoints'][0][1], objects_ann['keypoints'][1][1])
+                    _boxes.append([xmin,ymin,xmax,ymax])
+                    _scores.append([0.90])
+                boxes=torch.Tensor(_boxes)
+                scores=torch.Tensor(_scores)
+#其中search函数
+def search(path, filename):
+    path_file = []
+    for root, dirs, files in os.walk(path):
+        if filename in dirs or filename in files:
+            root = str(root)
+            re_path = os.path.join(root, filename)
+            path_file.append(re_path)
+
+    return path_file
