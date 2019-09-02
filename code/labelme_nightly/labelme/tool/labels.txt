@@ -1,0 +1,2 @@
+__ignore__
+'__background__', 'miss_sanding', 'black_spot', 'white_spot', 'crude_paring', 'white_miss_sanding', 'deficient_edge', 'crack'
