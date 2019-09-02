@@ -1,0 +1,16 @@
+pytorch使用多线程进行样本增强时，完成一个epoch后，第二次开始时初始化的随机种子相同，导致伪随机。
+
+1、
+train_loader = DataLoader(false_instance, shuffle=False, num_workers=4, worker_init_fn=lambda id: np.random.seed(torch.initial_seed() // 2**32 + id))
+
+
+2、
+def worker_init_fn(worker_id):                                                          
+    np.random.seed(np.random.get_state()[1][0] + worker_id)
+
+ds = RandomDataset()
+ds = DataLoader(ds, 10, shuffle=False, num_workers=4, worker_init_fn=worker_init_fn)
+
+
+参考：
+https://github.com/xingyizhou/CenterNet/issues/233
