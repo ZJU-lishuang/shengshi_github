@@ -76,9 +76,11 @@ def convert_list(xml_head_dir,xml_dir):
     annotations=0
     for xml_id in xml_head_dir:
         filepath, xmlfilename = os.path.split(xml_id)
-        
+        xml_id_old=os.path.join(filepath,xmlfilename)
+        xml_id=os.path.join(filepath,'g'+xmlfilename)
         #re=search(xml_dir,xmlfilename)
-        re=[(xml_id.replace('JPEGImages/','Annotations/')).replace('Train_data_head','Train_data')]  #search slow  #origin xml path
+        #原始的xml
+        re=[(xml_id.replace('JPEGImages/','Annotations/')).replace('/TK1/head_pre/','/TX2/Jpg/Train_data/')]  #search slow  #origin xml path
         
         if not os.path.exists(re[0]):
             print('No such file:{}'.format(re[0]))
@@ -87,11 +89,18 @@ def convert_list(xml_head_dir,xml_dir):
             continue
 
         if len(re) == 1:
-            re.extend([xml_id])
-            xmlfile=xml_id.replace('JPEGImages/','Annotations/')
-            
-            if not os.path.exists(filepath.replace('JPEGImages','Annotations')):
-                os.mkdir(filepath.replace('JPEGImages','Annotations'))
+            re.extend([xml_id_old])
+            #待生成的xml
+            xmlfile=(xml_id.replace('JPEGImages/','Annotations/')).replace('head_pre/','head_pre_xml/')
+            #待生成的xml的文件夹
+            xmlfilepath=(filepath.replace('JPEGImages','')).replace('head_pre/','head_pre_xml/')
+            if not os.path.exists(xmlfilepath):
+                os.mkdir(xmlfilepath)
+
+
+            xmlpath=(filepath.replace('JPEGImages','Annotations')).replace('head_pre/','head_pre_xml/')
+            if not os.path.exists(xmlpath):
+                os.mkdir(xmlpath)
             
             Merge_xmls(re,xmlfile)
         else:
@@ -109,12 +118,18 @@ if __name__ == '__main__':
     out_dir='/home/lishuang/Disk/pytorch/test/out'
     
     
-    xml_head_dir='/home/lishuang/Disk/nfs/Datasets/TX2/Train_data_head'
+    xml_head_dir='/home/lishuang/Disk/nfs/TK1/head_pre/guangzhou_T2_1007_1009_2_16'
     xml_origin_dir='/home/lishuang/Disk/nfs/Datasets/TX2/Train_data'
 
     #xml_list=get_list(xml_head_dir)   #xmllist.txt
 
-    xml_list=open('/home/lishuang/Disk/nfs/Datasets/TX2/Train_data_head/xmllist.txt').read().strip().split()
+    xml_list=open('/home/lishuang/Disk/nfs/TK1/head_pre/xmllist1.txt').read().strip().split()
+    convert_list(xml_list,xml_origin_dir)
+    xml_list=open('/home/lishuang/Disk/nfs/TK1/head_pre/xmllist2.txt').read().strip().split()
+    convert_list(xml_list,xml_origin_dir)
+    xml_list=open('/home/lishuang/Disk/nfs/TK1/head_pre/xmllist3.txt').read().strip().split()
+    convert_list(xml_list,xml_origin_dir)
+    xml_list=open('/home/lishuang/Disk/nfs/TK1/head_pre/xmllist4.txt').read().strip().split()
     convert_list(xml_list,xml_origin_dir)
     #convert_img(image_dir,xml_dir,out_dir)
 
