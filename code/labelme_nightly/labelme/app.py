@@ -623,8 +623,14 @@ class MainWindow(QtWidgets.QMainWindow, WindowMixin):
 
         if filename is not None and osp.isdir(filename):
             self.importDirImages(filename, load=False)
+        elif self.lastOpenDir and osp.exists(self.lastOpenDir):  #ls
+            self.importDirImages(self.lastOpenDir, load=False)
+            self.filename = self._config['open_imagename']
+            self.filename = osp.join(self.lastOpenDir, self.filename)
         else:
             self.filename = filename
+
+
 
         if config['file_search']:
             self.fileSearch.setText(config['file_search'])
@@ -939,6 +945,20 @@ class MainWindow(QtWidgets.QMainWindow, WindowMixin):
         currIndex = self.imageList.index(str(item.text()))
         if currIndex < len(self.imageList):
             filename = self.imageList[currIndex]
+
+            # yaml #ls
+            print (os.getcwd())
+            config_file = osp.join('config', 'default_config.yaml')
+            file_data = ""
+            with open(config_file) as f:
+                for line in f:
+                    if 'open_imagename: "' in line:
+                        # line=line.replace(defaultOpenDirPath,targetDirPath)
+                        line = line[:17] + osp.basename(filename) + line[-2:]
+                    file_data += line
+            with open(config_file, "w") as f:
+                f.write(file_data)
+
             if filename:
                 self.loadFile(filename)
 
@@ -1560,6 +1580,18 @@ class MainWindow(QtWidgets.QMainWindow, WindowMixin):
                 self.imageList.index(current_filename))
             self.fileListWidget.repaint()
 
+        # yaml #ls
+        config_file = osp.join('config', 'default_config.yaml')
+        file_data = ""
+        with open(config_file) as f:
+            for line in f:
+                if 'output_dir: "' in line:
+                    # line=line.replace(defaultOpenDirPath,targetDirPath)
+                    line = line[:13] + output_dir + line[-2:]
+                file_data += line
+        with open(config_file, "w") as f:
+            f.write(file_data)
+
     def saveFile(self, _value=False):
         assert not self.image.isNull(), "cannot save empty image"
         if self._config['flags'] or self.hasLabels():
@@ -1734,6 +1766,22 @@ class MainWindow(QtWidgets.QMainWindow, WindowMixin):
             QtWidgets.QFileDialog.ShowDirsOnly |
             QtWidgets.QFileDialog.DontResolveSymlinks))
         self.importDirImages(targetDirPath)
+
+
+        #yaml #ls
+        config_file = osp.join('config', 'default_config.yaml')
+        file_data = ""
+        with open(config_file) as f:
+            for line in f:
+                if 'open_dir: "' in line:
+                    # line=line.replace(defaultOpenDirPath,targetDirPath)
+                    line = line[:11] + targetDirPath+line[-2:]
+                file_data += line
+        with open(config_file,"w") as f:
+            f.write(file_data)
+
+
+
 
     @property
     def imageList(self):

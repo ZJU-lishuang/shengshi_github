@@ -14,6 +14,20 @@ from labelme.utils import newIcon
 
 
 def main():
+    import yaml
+    # yaml
+    # config_file = os.path.join('config', 'default_config.yaml')
+    # file_data = ""
+    # with open(config_file) as f:
+    #     for line in f:
+    #         if 'open_dir' in line:
+    #             line=line.replace("/home/lishuang/Disk/shengshi_data/split_folder/keypoint_lishuang/2017_04_20/img", "/home/lishuang/Disk/shengshi_data/split_folder/keypoint_lishuang/2017_04_20/img123")
+    #         file_data += line
+    # with open(config_file, "w") as f:
+    #     f.write(file_data)
+
+
+
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '--version', '-V', action='store_true', help='show version'
