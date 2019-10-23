@@ -1,0 +1,18 @@
+
+tar  -cvf  压缩包名.tar  文件夹路径   #将文件夹路径所有文件打包成压缩包名.tar
+例： tar -cvf  mycode.tar  /home/myCodePath
+
+
+
+
+
+tar  -xvf  压缩包名.tar   #解压 tar包
+例：tar   -xvf  mycode.tar
+
+tar   -xvf  mycode.tar -C /home/myCodePath  #解压路径
+
+
+
+#压缩指定后缀名
+     #待压缩文件夹位置      #后缀             				
+find childtest/ -name "*.jpg" | xargs tar cvf test.tar

@@ -198,6 +198,7 @@ def cut_xml_thread(arglist):
     return cut_xml(roi_box,fig_names_all,xmldirs_all,xml_names_all,save_roiimage_paths_all)
 
 def cut_xml(roi_box,fig_names_all,xmldirs_all,xml_names_all,save_roiimage_paths_all):
+    fig_num=len(fig_names_all)
     for i in range(len(fig_names_all)):
         xmldir = xmldirs_all[i]  # get absolute directory of relevant XML file's
         xml_name = xml_names_all[i]
@@ -211,7 +212,7 @@ def cut_xml(roi_box,fig_names_all,xmldirs_all,xml_names_all,save_roiimage_paths_
         xmlsavename = os.path.splitext(files)[0]  # file's name
         files = os.path.basename(save_roiimage_paths_all[i])  # get file name
         imagesavename = os.path.splitext(files)[0]  # file's name
-
+        print("id:",os.getpid()," [{}/{}] :".format(i+1,fig_num),imagename)
         assert imagename==xmlname==xmlsavename==imagesavename
 
 
@@ -221,6 +222,8 @@ def cut_xml(roi_box,fig_names_all,xmldirs_all,xml_names_all,save_roiimage_paths_
         result = []
         ######roi_box-[xmin,ymin,xmax,ymax]-[0,96,640,416]
         # print("len(bbox) = ", len(value.box))
+        
+
         for ibox in range(len(value.box)):
 
             xmin = max(roi_box.xmin, value.box[ibox].xmin)
@@ -236,24 +239,27 @@ def cut_xml(roi_box,fig_names_all,xmldirs_all,xml_names_all,save_roiimage_paths_
                 ymin = ymin - roi_box.ymin
                 ymax = ymax - roi_box.ymin
 
-                # check
-                w = roi_box.xmax - roi_box.xmin
-                h = roi_box.ymax - roi_box.ymin
-                if not ((xmin >= 0 and xmin < w) and (xmax > xmin and xmax <= w) and (ymin >= 0 and ymin < h) and (
-                        ymax > ymin and ymax <= h)):
-                    assert 0
+                # # check
+                # w = roi_box.xmax - roi_box.xmin
+                # h = roi_box.ymax - roi_box.ymin
+                # if not ((xmin >= 0 and xmin < w) and (xmax > xmin and xmax <= w) and (ymin >= 0 and ymin < h) and (
+                #         ymax > ymin and ymax <= h)):
+                #     assert 0
 
                 label_name = '1'
                 result.append([xmin, ymin, xmax, ymax, label_name])
 
+        if len(result)==0: #delete empty box
+            continue
         cv2.imwrite(save_roiimage_path, roi_image)
         CreatXml(roi_image, result, xml_name)
 
 
 if __name__ == '__main__':
     READ_PATH = "/home/lishuang/Disk/shengshi_data/split/Train_data"
-    SAVE_PATH = "/home/lishuang/Disk/shengshi_data/split/Tk1_Train_data_new"
+    SAVE_PATH = "/home/lishuang/Disk/shengshi_data/split/Tk1_Train_data"
 
+    
     fig_names_all=[]
     xmldirs_all = []
     xml_names_all = []
@@ -267,7 +273,7 @@ if __name__ == '__main__':
         check_dir(SaveFigDirectory)
         check_dir(SaveXmlDirectory)
 
-        fig_names = loadAllTagFile(FigDirectory, '.jpg')
+        # fig_names = loadAllTagFile(FigDirectory, '.jpg')
 
         fig_names = []
         xmldirs=[]
@@ -305,7 +311,7 @@ if __name__ == '__main__':
 
     # cut_xml(roi_box, fig_names_all, xmldirs_all, xml_names_all, save_roiimage_paths_all)
 
-    num_process = 4
+    num_process = 6
     avg = int(len(fig_names_all) / num_process)
     late = len(fig_names_all) % num_process
     p = Pool(num_process)
@@ -325,5 +331,17 @@ if __name__ == '__main__':
         res_l.append(result)
     p.close()
     p.join()
+
+    print("SAVE_PATH:",SAVE_PATH)
+    print('input')
+    for dir in subdirs(READ_PATH):
+        FigDirectory = os.path.join(READ_PATH, dir, 'JPEGImages')
+        fig_names = loadAllTagFile(FigDirectory, '.jpg')
+        print(dir," : ",len(fig_names))
+    print('output')
+    for dir in subdirs(SAVE_PATH):
+        SaveFigDirectory = os.path.join(SAVE_PATH, dir, 'JPEGImages')
+        fig_names = loadAllTagFile(SaveFigDirectory, '.jpg')
+        print(dir," : ",len(fig_names))
 
 
