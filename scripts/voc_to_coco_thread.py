@@ -72,10 +72,9 @@ def convert(fig_names_all, xmldirs_all, fig_save):
         if len(root.findall('object'))==0:
             continue
 
-        # print(i," : ",figname)
-
-        fig = cv2.imread(figname)
-        cv2.imwrite(os.path.join(fig_save, files), fig)
+        #时间主要消耗在保存图片
+        # fig = cv2.imread(figname)
+        # cv2.imwrite(os.path.join(fig_save, files), fig)
 
         ## The filename must be a number
         # filename = line[:-4]
@@ -139,15 +138,15 @@ def convert_singleprocess(fig_names_all, xmldirs_all, fig_save,json_file):
         xml_f = xmldirs_all[i]
         figname = fig_names_all[i]
         files = os.path.basename(figname)
-        print("xml_f=",xml_f)
+        # print("xml_f=",xml_f)
         tree = ET.parse(xml_f)
         root = tree.getroot()
 
         if len(root.findall('object'))==0:
             continue
-
-        fig = cv2.imread(figname)
-        cv2.imwrite(os.path.join(fig_save, files), fig)
+        #时间主要消耗在保存图片
+        # fig = cv2.imread(figname)
+        # cv2.imwrite(os.path.join(fig_save, files), fig)
 
         ## The filename must be a number
         # filename = line[:-4]
@@ -202,8 +201,8 @@ def convert_singleprocess(fig_names_all, xmldirs_all, fig_save,json_file):
 if __name__ == '__main__':
 
     READ_PATH = "/home/lishuang/Disk/shengshi_data/split/Tk1_all"
-    json_file = "/home/lishuang/Disk/shengshi_data/split/Tk1_Train_data_all/voc/annotations/pascal_trainval0712.json"
-    fig_save="/home/lishuang/Disk/shengshi_data/split/Tk1_Train_data_all/voc/images"
+    json_file = "/home/lishuang/Disk/shengshi_data/split/Tk1_Train_data_thread/voc/annotations/pascal_trainval0712.json"
+    fig_save="/home/lishuang/Disk/shengshi_data/split/Tk1_Train_data_thread/voc/images"
 
     fig_names_all = []
     xmldirs_all = []
@@ -235,11 +234,14 @@ if __name__ == '__main__':
 
     # convert_singleprocess(fig_names_all, xmldirs_all, fig_save,json_file)  #singleprocess
 
+    #多进程读写文件（I/O密集型），瓶颈在磁盘寻址速度上，和单进程读写文件速度相差不大
+
     starttime = time.time()
-    num_process = 6
+    cpu_num_process=6
+    num_process = 512
     avg = int(len(fig_names_all) / num_process)
     late = len(fig_names_all) % num_process
-    p = Pool(num_process)
+    p = Pool(cpu_num_process)
     res_l = []
     for i in range(num_process):
         start = i * avg
@@ -265,6 +267,7 @@ if __name__ == '__main__':
         annotations_all.extend(annotations)
 
     imagename={}
+    print("image num = ",len(images_all))
     starttime = time.time()
     for i in range(len(images_all)):
         images_all[i]['id']=i+1
@@ -299,6 +302,8 @@ if __name__ == '__main__':
 
     # json_file = "/home/lishuang/Disk/shengshi_data/split/dataset_Tk1_beijing_single/voc/annotations/pascal_trainval0712.json"
     # fig_save="/home/lishuang/Disk/shengshi_data/split/dataset_Tk1_beijing_single/voc/images"
+    # json_file = "/home/lishuang/Disk/shengshi_data/split/Tk1_Train_data_single/voc/annotations/pascal_trainval0712.json"
+    # fig_save="/home/lishuang/Disk/shengshi_data/split/Tk1_Train_data_single/voc/images"
 
     # starttime = time.time()
     # convert_singleprocess(fig_names_all, xmldirs_all, fig_save,json_file)  #singleprocess
