@@ -1,0 +1,21 @@
+
+# To activate anaconda3 environment
+
+source ~/.bashrc
+
+
+
+
+
+
+
+
+
+# To activate this environment, use
+#
+#     $ conda activate pytorch
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+

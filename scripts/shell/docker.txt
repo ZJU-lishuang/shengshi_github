@@ -1,0 +1,26 @@
+#列出所有镜像
+docker images
+
+#查看运行中的镜像
+docker ps
+
+#停止CONTAINER ID=56dd5fb4e962的容器
+docker container stop 56dd5fb4e962
+
+#删除CONTAINER ID=56dd5fb4e962的容器
+docker container rm 56dd5fb4e962
+
+
+#删除image
+docker rmi ID号
+
+#dockerfile安装
+docker build -t test:1.0 .
+
+#docker-nvidia安装
+docker pull nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
+#9.0 和7可变，选择版本，20系显卡驱动不支持cuda9
+
+
+#启动docker image
+docker container run --gpus all --rm -p 8444:3000 -it --ipc=host -v /home/lishuang/Disk/github/docker/crowdpose:/home/lishuang/Disk/github/docker/crowdpose nvidia/cuda:9.0-cudnn7-runtime-ubuntu16.04  /bin/bash

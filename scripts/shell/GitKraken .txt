@@ -1,0 +1,4 @@
+GitKraken linux无法提交 提示Please increase your inotify limit and reopen this repository
+
+https://www.jianshu.com/p/faa0dfe29eca
+

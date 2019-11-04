@@ -1,0 +1,9 @@
+nohup  python train.py --batchsize=16  > log.txt 2>&1 &
+
+log_batch16.txt:输出日志文件
+python train.py --batchsize=16：训练指令
+
+ps x:查看后台的指令
+
+
+其它工具：tmux和screen，安装这些需要root权限。
