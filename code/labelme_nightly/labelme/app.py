@@ -5,6 +5,9 @@ import os.path as osp
 import re
 import webbrowser
 
+import datetime
+import json
+
 import PIL.Image
 
 from qtpy import QtCore
@@ -369,6 +372,14 @@ class MainWindow(QtWidgets.QMainWindow, WindowMixin):
                          functools.partial(self.togglePolygons, True),
                          icon='eye', tip='Show all polygons', enabled=False)
 
+        hidenameAll = action('&Hide\nPointName',
+                         functools.partial(self.togglePointName, False),
+                         icon='eye', tip='Hide all PointName', enabled=False)
+
+        shownameAll = action('&Show\nPointName',
+                         functools.partial(self.togglePointName, True),
+                         icon='eye', tip='Show all PointName', enabled=False)
+
         help = action('&Tutorial', self.tutorial, icon='help',
                       tip='Show tutorial page')
         #缩放操作
@@ -518,7 +529,7 @@ class MainWindow(QtWidgets.QMainWindow, WindowMixin):
                 createLineStripMode,
                 editMode,
             ),
-            onShapesPresent=(saveAs, hideAll, showAll),
+            onShapesPresent=(saveAs, hideAll, showAll,hidenameAll, shownameAll),
         )
 
         self.canvas.edgeSelected.connect(self.actions.addPoint.setEnabled)
@@ -551,6 +562,8 @@ class MainWindow(QtWidgets.QMainWindow, WindowMixin):
             None,
             hideAll,
             showAll,
+            hidenameAll,
+            shownameAll,
             None,
             zoomIn,
             zoomOut,
@@ -669,6 +682,15 @@ class MainWindow(QtWidgets.QMainWindow, WindowMixin):
 
         self.populateModeActions()
 
+        self.currentname=[]
+        self.currentnamedict = {}
+        self.worknum=0
+        self.workpersonnum = 0
+
+        self.txt_file = ''
+        self.rewrite_txt=True
+
+
         # self.firstStart = True
         # if self.firstStart:
         #    QWhatsThis.enterWhatsThisMode()
@@ -702,6 +724,34 @@ class MainWindow(QtWidgets.QMainWindow, WindowMixin):
             label_file = osp.splitext(self.imagePath)[0] + '.json'
             basename = os.path.basename(self.imagePath)
             basename = osp.splitext(basename)[0]
+
+            dirpath=os.path.dirname(self.imagePath)
+            # txtpath = os.path.join(dirpath,'note.txt')
+            dirbasename = os.path.basename(dirpath)
+            dirpath=os.path.dirname(dirpath)
+            txtpath = os.path.join(dirpath,dirbasename+'.txt')
+            if not os.path.exists(txtpath):
+                a = open(txtpath, 'a')
+                a.close()
+            if self.rewrite_txt:
+                r = open(txtpath, 'r')
+                self.txt_file = r.read()
+                self.rewrite_txt = False
+                r.close()
+
+            # if basename not in self.currentname:
+            # # if self.currentname !=basename:
+            #     self.worknum=self.worknum+1
+            #     # self.currentname=basename
+            #     self.currentname.append(basename)
+            #
+            #     nowTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            #     with open(txtpath, 'w') as f:
+            #         f.write(self.txt_file)
+            #         f.write('~~~~~~~~~~~~~~~{}~~~~~~~~~~~~~~~~~~~\n'.format(nowTime))
+            #         f.write('today work num = {}'.format(self.worknum))
+            #         f.write('\n\n')
+
             if self.output_dir:
                 label_file = osp.join(
                     self.output_dir, basename + LabelFile.suffix
@@ -709,6 +759,24 @@ class MainWindow(QtWidgets.QMainWindow, WindowMixin):
             # if self.output_dir:
             #     label_file = osp.join(self.output_dir, label_file)
             self.saveLabels(label_file)
+
+            json_ann = json.load(open(label_file))
+            objects_anns = json_ann['objects']
+            objects_anns_num=len(objects_anns)
+            self.currentnamedict[basename] = objects_anns_num
+            self.worknum = len(self.currentnamedict)
+            self.workpersonnum=sum(self.currentnamedict.values())
+            nowTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            with open(txtpath, 'w') as f:
+                f.write(self.txt_file)
+                f.write('~~~~~~~~~~~~~~~{}~~~~~~~~~~~~~~~~~~~\n'.format(nowTime))
+                f.write('today work num = {}'.format(self.worknum))
+                f.write('\n')
+                f.write('today work person num = {}'.format(self.workpersonnum))
+                f.write('\n\n')
+            # with open(os.path.join(dirpath,'log.txt'), 'w') as f:  #记录具体的文件日志
+            #     f.write(str(self.currentnamedict))
+
             return
         self.dirty = True
         self.actions.save.setEnabled(True)
@@ -942,13 +1010,17 @@ class MainWindow(QtWidgets.QMainWindow, WindowMixin):
         if not self.mayContinue():
             return
 
-        currIndex = self.imageList.index(str(item.text()))
+        currIndex = self.imageList.index(str(item.text().split(':')[1]))
+        # currIndex = self.imageList.index(str(item.text()))  #ls
         if currIndex < len(self.imageList):
             filename = self.imageList[currIndex]
 
             # yaml #ls
-            print (os.getcwd())
-            config_file = osp.join('config', 'default_config.yaml')
+            # print (os.getcwd())
+            # config_file = osp.join('config', 'default_config.yaml')
+            config_file='/home/lishuang/Disk/shengshi_github/code/labelme_nightly/labelme/config/default_config.yaml'
+            if not os.path.exists(config_file):
+                config_file = osp.join(os.getcwd(),'labelme','config', 'default_config.yaml')
             file_data = ""
             with open(config_file) as f:
                 for line in f:
@@ -1314,6 +1386,11 @@ class MainWindow(QtWidgets.QMainWindow, WindowMixin):
         for item, shape in self.labelList.itemsToShapes:
             item.setCheckState(Qt.Checked if value else Qt.Unchecked)
 
+    # 隐藏或显示标定
+    def togglePointName(self, value):
+        for tmpshape in self.canvas.shapes:
+            tmpshape.showpointname=value
+
     def convertImageDataToPng(self, imageData):
         if imageData is None:
             return
@@ -1339,6 +1416,8 @@ class MainWindow(QtWidgets.QMainWindow, WindowMixin):
         if filename is None:
             filename = self.settings.value('filename', '')
         filename = str(filename)
+        if ':' in filename:
+             filename=filename.split(':')[1]  #ls
         if not QtCore.QFile.exists(filename):
             self.errorMessage(
                 'Error opening file', 'No such file: <b>%s</b>' % filename)
@@ -1581,7 +1660,11 @@ class MainWindow(QtWidgets.QMainWindow, WindowMixin):
             self.fileListWidget.repaint()
 
         # yaml #ls
-        config_file = osp.join('config', 'default_config.yaml')
+        # config_file = osp.join('config', 'default_config.yaml')
+        
+        config_file='/home/lishuang/Disk/shengshi_github/code/labelme_nightly/labelme/config/default_config.yaml'
+        if not os.path.exists(config_file):
+            config_file = osp.join(os.getcwd(),'labelme','config', 'default_config.yaml')
         file_data = ""
         with open(config_file) as f:
             for line in f:
@@ -1769,7 +1852,10 @@ class MainWindow(QtWidgets.QMainWindow, WindowMixin):
 
 
         #yaml #ls
-        config_file = osp.join('config', 'default_config.yaml')
+        # config_file = osp.join('config', 'default_config.yaml')
+        config_file='/home/lishuang/Disk/shengshi_github/code/labelme_nightly/labelme/config/default_config.yaml'
+        if not os.path.exists(config_file):
+            config_file = osp.join(os.getcwd(),'labelme','config', 'default_config.yaml')
         file_data = ""
         with open(config_file) as f:
             for line in f:
@@ -1788,7 +1874,8 @@ class MainWindow(QtWidgets.QMainWindow, WindowMixin):
         lst = []
         for i in range(self.fileListWidget.count()):
             item = self.fileListWidget.item(i)
-            lst.append(item.text())
+            # lst.append(item.text())
+            lst.append(item.text().split(':')[1])  #ls
         return lst
 
     def importDirImages(self, dirpath, pattern=None, load=True):
@@ -1801,13 +1888,15 @@ class MainWindow(QtWidgets.QMainWindow, WindowMixin):
         self.lastOpenDir = dirpath
         self.filename = None
         self.fileListWidget.clear()
+        num=0
         for filename in self.scanAllImages(dirpath):
             if pattern and pattern not in filename:
                 continue
             label_file = osp.splitext(filename)[0] + '.json'
             if self.output_dir:
                 label_file = osp.join(self.output_dir, label_file)
-            item = QtWidgets.QListWidgetItem(filename)
+            num=num+1
+            item = QtWidgets.QListWidgetItem('{} :'.format(num)+filename)
             item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
             if QtCore.QFile.exists(label_file) and \
                     LabelFile.isLabelFile(label_file):
@@ -1815,6 +1904,7 @@ class MainWindow(QtWidgets.QMainWindow, WindowMixin):
             else:
                 item.setCheckState(Qt.Unchecked)
             self.fileListWidget.addItem(item)
+        # self.imageList = self.scanAllImages(dirpath)
         self.openNextImg(load=load)
 
     def scanAllImages(self, folderPath):

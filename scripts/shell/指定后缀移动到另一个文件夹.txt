@@ -1,0 +1,5 @@
+find . -type f -name "*.jpg"  -exec mv {} ../JPEGImages/. \;
+
+find . -type f -name "*.xml"  -exec mv {} ../Annotations/. \;
+
+find . -type f -name "*.json"  -exec mv {} ../Annotations/. \;

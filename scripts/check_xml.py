@@ -1,5 +1,6 @@
 import os
 import cv2
+import math
 import shutil
 import xml.etree.ElementTree as ET
 
@@ -37,7 +38,8 @@ def check_xml(imagename, xmlname):
     if len(root.findall('object'))==0:
         print("error: ",imagename," has no box")
         return -1
-
+    centerx=[]
+    centery=[]
     for obj in root.findall('object'):
         cls = obj.find('name').text
 
@@ -52,6 +54,9 @@ def check_xml(imagename, xmlname):
         ymin = int(ymin)
         ymax = int(ymax)
 
+        centerx.append((xmax-xmin)/2)
+        centery.append((ymax-ymin)/2)
+
         # assert (xmin >= 0 and xmin < w)
         # assert (xmax > xmin and xmax <= w)
         #
@@ -64,23 +69,37 @@ def check_xml(imagename, xmlname):
             print("error: ",imagename," has error boxes")
             return -1
 
-    return 0
+    objnum=len(root.findall('object'))
+    distance=10000
+    if objnum > 1:
+        for i in range(objnum):
+            centerx1=centerx[i]
+            centery1=centery[i]
+            for j in range(i+1,objnum):
+                centerx2=centerx[j]
+                centery2=centery[j]
+                distancetmp=math.sqrt((centery2-centery1)**2+(centerx2-centerx1)**2)
+                if distancetmp < distance:
+                    distance=distancetmp
+    
+    return distance
 
 if __name__ == '__main__':
 
-    READ_PATH = "/home/lishuang/Disk/nfs/TK1/tk1_data/91614_split"
-    SAVE_PATH = "/home/lishuang/Disk/shengshi_data/split/Tk1_Train_data"
+    READ_PATH = "/home/lishuang/Disk/shengshi_data/split/Tk1_all"
+    # SAVE_PATH = "/home/lishuang/Disk/shengshi_data/split/Tk1_Train_data"
 
     file_data = ""
     dirlen=len(os.listdir(READ_PATH))
     num=0
+    distance=10000
     for dir in os.listdir(READ_PATH):
         FigDirectory = os.path.join(READ_PATH, dir, 'JPEGImages')
         XmlDirectory = os.path.join(READ_PATH, dir, 'Annotations')
-        SaveFigDirectory = os.path.join(SAVE_PATH, dir, 'JPEGImages')
-        SaveXmlDirectory = os.path.join(SAVE_PATH, dir, 'Annotations')
-        check_dir(SaveFigDirectory)
-        check_dir(SaveXmlDirectory)
+        # SaveFigDirectory = os.path.join(SAVE_PATH, dir, 'JPEGImages')
+        # SaveXmlDirectory = os.path.join(SAVE_PATH, dir, 'Annotations')
+        # check_dir(SaveFigDirectory)
+        # check_dir(SaveXmlDirectory)
 
         fig_names = loadAllTagFile(FigDirectory, '.jpg')
         
@@ -93,22 +112,27 @@ if __name__ == '__main__':
             print("[{}/{}]".format(num,dirlen),i+1,'/',figlen,' : ',filename + '.jpg')
             xmldir = os.path.join(XmlDirectory, filename + '.xml')  # get absolute directory of relevant XML file's
             #move
-            xml_name = (os.path.join(SaveXmlDirectory, os.path.splitext(file_path.split('/')[-1])[0] + '.xml'))
-            save_roiimage_path = (os.path.join(SaveFigDirectory, os.path.splitext(file_path.split('/')[-1])[0] + '.jpg'))
+            # xml_name = (os.path.join(SaveXmlDirectory, os.path.splitext(file_path.split('/')[-1])[0] + '.xml'))
+            # save_roiimage_path = (os.path.join(SaveFigDirectory, os.path.splitext(file_path.split('/')[-1])[0] + '.jpg'))
 
 
             checksign=check_xml(fig_names[i], xmldir)
+
+            if distance > checksign:
+                distance=checksign
+            print("min distance=",distance)
 
             if checksign < 0 :
                 # file_data.append(fig_names[i])
                 file_data+=fig_names[i]+'\n'
                 #move
-                shutil.move(file_path,save_roiimage_path)
-                shutil.move(xmldir,xml_name)    
+                # shutil.move(file_path,save_roiimage_path)
+                # shutil.move(xmldir,xml_name)    
 
 
-    with open('91614_split_errorxml.txt','w') as f:
+    with open('1021_cut_pic_errorxml.txt','w') as f:
         f.write(file_data)
+        f.write(str(distance))
 
 
 

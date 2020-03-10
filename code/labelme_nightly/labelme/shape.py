@@ -25,10 +25,17 @@ DEFAULT_KEYPOINT_COLOR=[QtGui.QColor(192, 192, 192),QtGui.QColor(255, 0, 255),
 
 
 
-_keypoints=['_head','_neck',  \
+# _keypoints=['_head','_neck',  \
+#              '_right_shoulder','_right_elbow','_right_hand','_right_buttocks','_right_knee','_right_foot',  \
+#              '_left_shoulder','_left_elbow','_left_hand','_left_buttocks','_left_knee','_left_foot']
+# _keypointsname=['头部','脖子',  \
+#              '右肩','右肘','右手','右臀','右膝','右脚',  \
+#              '左肩','左肘','左手','左臀','左膝','左脚']
+
+_keypoints=['_head', \
              '_right_shoulder','_right_elbow','_right_hand','_right_buttocks','_right_knee','_right_foot',  \
              '_left_shoulder','_left_elbow','_left_hand','_left_buttocks','_left_knee','_left_foot']
-_keypointsname=['头部','脖子',  \
+_keypointsname=['头部',  \
              '右肩','右肘','右手','右臀','右膝','右脚',  \
              '左肩','左肘','左手','左臀','左膝','左脚']
 
@@ -49,6 +56,7 @@ class Shape(object):
     point_type = P_ROUND
     point_size = 8
     scale = 1.0
+    showpointname=True
 
     def __init__(self, label=None, line_color=None, shape_type=None):
         self.label = label
@@ -60,7 +68,9 @@ class Shape(object):
         self.paintpoint=False
         #if shape_type == 'PERSONKEYPOINTS':
         self.bodyvisible=[]   #关键点属性和点的连接关系
-        self.skeleton=[[1,0],[2,1],[3,2],[4,3],[5,2],[6,5],[7,6],[8,1],[9,8],[10,9],[11,5],[11,8],[12,11],[13,12]]
+        # self.skeleton=[[1,0],[2,1],[3,2],[4,3],[5,2],[6,5],[7,6],[8,1],[9,8],[10,9],[11,5],[11,8],[12,11],[13,12]]
+        self.skeleton = [ [1, 0], [2, 1], [3, 2], [4, 1], [5, 4], [6, 5], [7, 0], [8, 7], [9, 8], [10, 4],
+                         [10, 7], [11, 10], [12, 11]]
 
         self._highlightIndex = None
         self._highlightMode = self.NEAR_VERTEX
@@ -196,7 +206,7 @@ class Shape(object):
                     # if self.points[1].x() == 0:
                     #     print('error')
                     self.drawVertex(eval(_keypoints[len(self.bodyvisible)]), 1)
-                elif (self.paintpoint and self.paintrect) or len(self.points)==16: #点和框都画
+                elif (self.paintpoint and self.paintrect) or len(self.points)==2+len(_keypoints): #点和框都画
                     rectpoints=self.points[:2]
                     if len(rectpoints) == 2:  #矩形框
                         rectangle = self.getRectFromLine(*rectpoints)
@@ -268,7 +278,7 @@ class Shape(object):
             painter.drawPath(vrtx_path)
             painter.fillPath(vrtx_path, self.vertex_fill_color)
             if self.shape_type == 'PERSONKEYPOINTS':#标注人体关键点时颜色标定添加步骤显示不同点颜色
-                if (self.paintpoint and self.paintrect) or len(self.points)==16:
+                if (self.paintpoint and self.paintrect) or len(self.points)==2+len(_keypoints):
                     for i, p in enumerate(self.points):
                         if i>1 and self.bodyvisible[i-2] == 0:  #无标定点不画,进入此条件意味着开始画关键点了
                             continue
@@ -298,11 +308,13 @@ class Shape(object):
         elif shape == self.P_ROUND:
             if self.shape_type == 'PERSONKEYPOINTS':
                 if i>1:
-                    path.addText(point, QtGui.QFont(), '{}'.format(_keypointsname[i-2]))
+                    if self.showpointname:
+                        path.addText(point, QtGui.QFont(), '{}'.format(_keypointsname[i-2]))
                     if self.bodyvisible[i-2] == 1:
                         path.addEllipse(point, d, d)  # 不可见点显示为圆环，可见点显示为实心圆  #ls
-                elif i==1 and len(self.bodyvisible) != 14 and self.paintpoint and not self.paintrect:#绘画当前点时添加的条件,显示标定的当前点属性
-                    path.addText(point, QtGui.QFont(), '{}'.format(_keypointsname[len(self.bodyvisible)]))
+                elif i==1 and len(self.bodyvisible) != 13 and self.paintpoint and not self.paintrect:#绘画当前点时添加的条件,显示标定的当前点属性
+                    if self.showpointname:
+                        path.addText(point, QtGui.QFont(), '{}'.format(_keypointsname[len(self.bodyvisible)]))
             #     if i > 1 and self.bodyvisible[i-2] == 1:
             #         path.addEllipse(point, d , d ) #不可见点显示为圆环，可见点显示为实心圆  #ls
             # path.addText(point, QtGui.QFont(), 'test')

@@ -20,7 +20,7 @@ def loadAllTagFile( DirectoryPath, tag ):# download all files' name
 
 if __name__ == '__main__':
 
-    READ_PATH = "/home/lishuang/Disk/nfs/TK1/tk1_data/91614_split"
+    READ_PATH = "/home/lishuang/Disk/shengshi_data/新建文件夹/home/lzm/Disk3T/Train_data/Datasets/TX2/Jpg/1021_cut_pic"
 
     file_data = ""
 
@@ -49,7 +49,7 @@ if __name__ == '__main__':
             file_data+=fig_names_all[i]+'\n'+'the same with '+filesamename
 
 
-    with open('91614_split_samefile.txt','w') as f:
+    with open('1021_cut_pic_samefile.txt','w') as f:
         f.write(file_data)
 
 

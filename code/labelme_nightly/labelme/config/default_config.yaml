@@ -2,13 +2,13 @@ auto_save: true
 display_label_popup: false
 store_data: false
 keep_prev: false
-open_dir: "/home/lishuang/Disk/shengshi_data/split_folder/keypoint_lishuang/2018_01_11/img"
-output_dir: "/home/lishuang/Disk/shengshi_data/split_folder/keypoint_lishuang/2018_01_11/json"
-open_imagename: "image_2018_01_11_01_291.jpg"
+open_dir: "/home/lishuang/Disk/dukto/防尾随关键点标注3/2018_06_19/JPEGImages_10_zhang"
+output_dir: "/home/lishuang/Disk/dukto/防尾随关键点标注3/2018_06_19/json_10"
+open_imagename: "image_2018_06_19_02_999.jpg"
 
 flags: null
 #keyflags: ['head','neck','right_shoulder','right_elbow','right_hand','right_buttocks','right_knee','right_foot','left_shoulder','left_elbow','left_hand','left_buttocks','left_knee','left_foot']
-keyflags: ['头部','脖子','右肩','右肘','右手','右臀','右膝','右脚','左肩','左肘','左手','左臀','左膝','左脚']
+keyflags: ['头部','右肩','右肘','右手','右臀','右膝','右脚','左肩','左肘','左手','左臀','左膝','左脚']
 
 labels: ['person']
 file_search: null

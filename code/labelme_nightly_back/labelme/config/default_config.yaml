@@ -1,0 +1,89 @@
+auto_save: true
+display_label_popup: false
+store_data: false
+keep_prev: false
+open_dir: "/home/lishuang/Disk/shengshi_data/something_ready_to _delete/防尾随/test/gangzhuao_xianchang_1/防尾随关键点标注测试/keypoint"
+output_dir: "/home/lishuang/Disk/shengshi_data/something_ready_to _delete/防尾随/test/gangzhuao_xianchang_1/防尾随关键点标注测试/keypoint"
+open_imagename: "2018-07-19_video_1384.jpg"
+
+flags: null
+#keyflags: ['head','neck','right_shoulder','right_elbow','right_hand','right_buttocks','right_knee','right_foot','left_shoulder','left_elbow','left_hand','left_buttocks','left_knee','left_foot']
+keyflags: ['头部','脖子','右肩','右肘','右手','右臀','右膝','右脚','左肩','左肘','左手','左臀','左膝','左脚']
+
+labels: ['person']
+file_search: null
+sort_labels: true
+validate_label: 'instance'
+
+# main
+key_flag_dock:
+  show: true
+  closable: true
+  movable: true
+  floatable: true
+flag_dock:
+  show: true
+  closable: true
+  movable: true
+  floatable: true
+label_dock:
+  show: true
+  closable: true
+  movable: true
+  floatable: true
+shape_dock:
+  show: true
+  closable: true
+  movable: true
+  floatable: true
+file_dock:
+  show: true
+  closable: true
+  movable: true
+  floatable: true
+
+# label_dialog
+show_label_text_field: true
+label_completion: startswith
+fit_to_content:
+  column: true
+  row: false
+
+epsilon: 11.0
+
+shortcuts:
+  close: Ctrl+W
+  open: Ctrl+O
+  open_dir: Ctrl+U
+  quit: Ctrl+Q
+  save: Ctrl+S
+  save_as: Ctrl+Shift+S
+  save_to: null
+
+  open_next: [D, Ctrl+Shift+D]
+  open_prev: [A, Ctrl+Shift+A]
+
+  zoom_in: [Ctrl++, Ctrl+=]
+  zoom_out: Ctrl+-
+  zoom_to_original: Ctrl+0
+  fit_window: Ctrl+F
+  fit_width: Ctrl+Shift+F
+
+  add_point: Ctrl+Shift+P
+  create_polygon: Ctrl+N
+  create_rectangle: Ctrl+R
+  create_circle: null
+  create_line: null
+  create_point: null
+  create_personkeypoint: W
+  create_linestrip_KEYPOINTS: null
+  edit_polygon: M
+  delete_polygon: Delete
+  duplicate_polygon: Ctrl+D
+  undo: Ctrl+Z
+  undo_last_point: [Ctrl+Z, Backspace]
+  no_label_point: X
+  edit_label: E
+  edit_line_color: Ctrl+L
+  edit_fill_color: Ctrl+Shift+L
+  toggle_keep_prev_mode: Ctrl+P

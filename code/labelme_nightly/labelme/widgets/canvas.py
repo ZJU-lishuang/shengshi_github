@@ -18,7 +18,7 @@ CURSOR_DRAW = QtCore.Qt.CrossCursor
 CURSOR_MOVE = QtCore.Qt.ClosedHandCursor
 CURSOR_GRAB = QtCore.Qt.OpenHandCursor
 
-keypointbodyname=['head','neck',
+keypointbodyname=['head',
                   'right_shoulder','right_elbow','right_hand','right_buttocks','right_knee','right_foot',
                   'left_shoulder','left_elbow','left_hand','left_buttocks','left_knee','left_foot',]
 
@@ -369,7 +369,7 @@ class Canvas(QtWidgets.QWidget):
                             else:
                                 self.current.bodyvisible.append(2)  #可见
                         self.line.bodyvisible=self.current.bodyvisible
-                        if len(self.current.points) == 16: #点完16个点结束
+                        if len(self.current.points) == 2+len(keypointbodyname): #点完16个点结束
                             self.finalise()
                 elif not self.outOfPixmap(pos):
                     # Create new shape.
@@ -491,6 +491,7 @@ class Canvas(QtWidgets.QWidget):
                 if self.isLeftButtonPressed and (shape.shape_type == 'RECT') :#and (shape.label.encode('utf-8') if PY2 else shape.label == 'person'): #左键选中矩形框时，且为目标属性时，获取保存人物框 #ls
                     #print('selectedPerson')
                     self.deSelectPerson()
+                    self.line = Shape(line_color=self.lineColor)
                     self.selectedPerson=shape
                 self.selectedShape = shape
                 self.calculateOffsets(shape, point)
@@ -644,7 +645,7 @@ class Canvas(QtWidgets.QWidget):
         ymin=self.pixmap.height()
         ymax=0
         w, h = self.pixmap.width(), self.pixmap.height()
-        for i in range(14):#关键点外接矩形框
+        for i in range(13):#关键点外接矩形框
             if self.hShape.bodyvisible[i] != 0:
                 xmin=min(self.hShape.points[i+2].x(),xmin)
                 xmax=max(self.hShape.points[i+2].x(),xmax)
@@ -728,7 +729,7 @@ class Canvas(QtWidgets.QWidget):
         elif p2.y() >= h:
             p2.setY(h - 1)
 
-        for i in range(14):#关键点的外接矩形框
+        for i in range(13):#关键点的外接矩形框
             if self.hShape.bodyvisible[i] != 0:
                 xmin = min(self.hShape.points[i + 2].x(), xmin)
                 xmax = max(self.hShape.points[i + 2].x(), xmax)
@@ -902,7 +903,7 @@ class Canvas(QtWidgets.QWidget):
                 self.current.bodyvisible.append(0)  # 无标注
 
                 self.line.bodyvisible = self.current.bodyvisible
-                if len(self.current.points) == 16:  # 点完16个点结束，最后一个点为不可见点
+                if len(self.current.points) == 2+len(keypointbodyname):  # 点完16个点结束，最后一个点为不可见点
                     self.finalise()
                 else:
                     self.update()
