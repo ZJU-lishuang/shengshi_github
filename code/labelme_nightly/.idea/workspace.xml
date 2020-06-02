@@ -3,18 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="e8670ad1-2006-42cb-8ad7-1fc59968bdf2" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/labelme/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/labelme/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/labelme/config/default_config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/labelme/config/default_config.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/labelme/shape.py" beforeDir="false" afterPath="$PROJECT_DIR$/labelme/shape.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/labelme/utils/shape.py" beforeDir="false" afterPath="$PROJECT_DIR$/labelme/utils/shape.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/labelme/widgets/canvas.py" beforeDir="false" afterPath="$PROJECT_DIR$/labelme/widgets/canvas.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../paper/Objects as Points/Objects as Points.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../scripts/bar_test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../scripts/bigsmall_dif.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../scripts/check_same_name.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../scripts/check_same_name.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../scripts/check_xml.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../scripts/check_xml.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../scripts/shell/脚本说明.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../scripts/voc_to_coco_thread.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../scripts/voc_to_coco_thread.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -48,7 +36,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/labelme/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="11554">
+            <state relative-caret-position="11055">
               <caret line="776" column="77" selection-start-line="776" selection-start-column="77" selection-end-line="776" selection-end-column="77" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
@@ -147,8 +135,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="width" value="1920" />
-    <option name="height" value="1037" />
+    <option name="x" value="134" />
+    <option name="y" value="60" />
+    <option name="width" value="1717" />
+    <option name="height" value="927" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -286,17 +276,18 @@
       <workItem from="1578277917009" duration="4730000" />
       <workItem from="1582081668124" duration="2489000" />
       <workItem from="1583227886223" duration="631000" />
+      <workItem from="1590547953086" duration="676000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="57466000" />
+    <option name="totallyTimeSpent" value="58142000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="-1" width="1920" height="1039" extended-state="6" />
+    <frame x="0" y="0" width="1920" height="1037" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.31465518" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.3196986" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -471,6 +462,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/labelme/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="11055">
+          <caret line="776" column="77" selection-start-line="776" selection-start-column="77" selection-end-line="776" selection-end-column="77" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/labelme/widgets/zoom_widget.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
@@ -491,16 +492,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="8" selection-start-line="4" selection-end-line="4" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/labelme/app.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11554">
-          <caret line="776" column="77" selection-start-line="776" selection-start-column="77" selection-end-line="776" selection-end-column="77" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>

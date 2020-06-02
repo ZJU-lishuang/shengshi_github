@@ -41,7 +41,7 @@ def check_xml(imagename, xmlname):
     centerx=[]
     centery=[]
     for obj in root.findall('object'):
-        cls = obj.find('name').text
+        cls_name = obj.find('name').text
 
         xmlbox = obj.find('bndbox')
         xmin = xmlbox.find('xmin').text
@@ -53,6 +53,11 @@ def check_xml(imagename, xmlname):
         xmax = int(xmax)
         ymin = int(ymin)
         ymax = int(ymax)
+        cls_num=int(cls_name)
+
+        if cls_num!=1:
+            return -1
+
 
         centerx.append((xmax-xmin)/2)
         centery.append((ymax-ymin)/2)
@@ -86,7 +91,7 @@ def check_xml(imagename, xmlname):
 
 if __name__ == '__main__':
 
-    READ_PATH = "/home/lishuang/Disk/shengshi_data/split/Tk1_all"
+    READ_PATH = "/home/lishuang/Disk/shengshi_data/机场行李箱数据"
     # SAVE_PATH = "/home/lishuang/Disk/shengshi_data/split/Tk1_Train_data"
 
     file_data = ""
@@ -118,7 +123,7 @@ if __name__ == '__main__':
 
             checksign=check_xml(fig_names[i], xmldir)
 
-            if distance > checksign:
+            if checksign>0 and distance > checksign:
                 distance=checksign
             print("min distance=",distance)
 

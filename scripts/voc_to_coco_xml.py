@@ -13,7 +13,7 @@ START_BOUNDING_BOX_ID = 1
 #注意下面的dict存储的是实际检测的类别，需要根据自己的实际数据进行修改
 #这里以自己的数据集person和hat两个类别为例，如果是VOC数据集那就是20个类别
 #注意类别名称和xml文件中的标注名称一致
-PRE_DEFINE_CATEGORIES = {"person": 1}
+PRE_DEFINE_CATEGORIES = {"trunk": 1}
  
 def get(root, name):
     vars = root.findall(name)
@@ -114,7 +114,7 @@ def convert(xml_dir, json_file):
 if __name__ == '__main__':
     folder_list= ["train","val","test"]
     #注意更改base_dir为本地实际图像和标注文件路径
-    base_dir = "/home/lishuang/Disk/dukto/gangzhuao_xianchang_1" 
+    base_dir = "/home/lishuang/Disk/shengshi_data/xilixiang" 
     xml_dir = base_dir + "/Annotations/"
     json_dir = base_dir + "/instances_" + "test" + ".json"
     """

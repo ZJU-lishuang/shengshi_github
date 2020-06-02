@@ -280,9 +280,9 @@ def convert_singleprocess(fig_names_all, xmldirs_all, fig_save,json_file):
 
 if __name__ == '__main__':
 
-    READ_PATH = "/home/lishuang/Disk/shengshi_data/split/Tk1_Train100"
-    json_file = "/home/lishuang/Disk/shengshi_data/split/Tk1_Train_data_single100/voc/annotations/pascal_trainval0712.json"
-    fig_save="/home/lishuang/Disk/shengshi_data/split/Tk1_Train_data_single100/voc/images"
+    READ_PATH = "/home/lishuang/Disk/shengshi_data/xilixiang"
+    json_file = "/home/lishuang/Disk/shengshi_data/xilixiang_coco/annotations/pascal_trainval0712.json"
+    fig_save="/home/lishuang/Disk/shengshi_data/xilixiang_coco/images"
 
     fig_names_all = []
     xmldirs_all = []
