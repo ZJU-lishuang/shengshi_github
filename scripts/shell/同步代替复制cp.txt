@@ -1,0 +1,6 @@
+rsync -av --exclude=*.jpg --exclude=*.xml ./防尾随训练数据整理 /home/lishuang/Disk/nfs
+
+#--exclude=*.jpg  排除jpg后缀文件
+
+#./防尾随训练数据整理   待同步的文件夹
+#/home/lishuang/Disk/nfs  同步文件夹的目的地

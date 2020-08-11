@@ -3,3 +3,7 @@ find . -type f -name "*.jpg"  -exec mv {} ../JPEGImages/. \;
 find . -type f -name "*.xml"  -exec mv {} ../Annotations/. \;
 
 find . -type f -name "*.json"  -exec mv {} ../Annotations/. \;
+
+find . -name *.txt | xargs mv -t ../Annotations
+find . -name *.txt | xargs -I file mv file ../Annotations
+xargs命令将find的结果传递给mv命令，通过-I file参数指定输入的别名为file。该段命令可替换为| xargs mv -t ./，mv -t颠倒了原路径和目标路径，免除了-I参数，但若文件名含有空格，则不能正常执行。

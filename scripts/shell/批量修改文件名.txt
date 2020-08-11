@@ -1,0 +1,5 @@
+for var in `find ./videotraindataset/ -name *.jpg`; do mv "$var" "${var/0.9_/}"; done
+
+for var in `find ./videotraindataset/ -name *.xml`; do mv "$var" "${var/0.9_/}"; done
+
+#videotraindataset文件夹下*.xml后缀， "${var/0.9_/}" 字符替换 var中0.9_替换为空
