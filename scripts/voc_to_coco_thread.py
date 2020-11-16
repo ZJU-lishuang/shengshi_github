@@ -7,7 +7,7 @@ import xml.etree.ElementTree as ET
 
 from multiprocessing import Pool
 
-PRE_DEFINE_CATEGORIES = {"1": 1}
+PRE_DEFINE_CATEGORIES = {"1": 1,"2": 2 ,"3": 3,"4": 4 ,"5": 5 ,"字符" : 1}
 START_BOUNDING_BOX_ID = 1
 
 
@@ -88,34 +88,34 @@ def convert(fig_names_all, xmldirs_all, fig_save):
         # if len(root.findall('object'))!=1:  #single simple
         #     continue
     
-        if len(root.findall('object'))!=1:  #single complex
-            tmpxmin=[]
-            tmpymin=[]
-            tmpxmax=[]
-            tmpymax=[]
-            flag=0
-            for obj in get(root, 'object'):
-                bndbox = get_and_check(obj, 'bndbox', 1)
-                xmin = int(get_and_check(bndbox, 'xmin', 1).text)
-                ymin = int(get_and_check(bndbox, 'ymin', 1).text)
-                xmax = int(get_and_check(bndbox, 'xmax', 1).text)
-                ymax = int(get_and_check(bndbox, 'ymax', 1).text)
-                assert (xmax > xmin)
-                assert (ymax > ymin)
-                tmpxmin.append(xmin)
-                tmpymin.append(ymin)
-                tmpxmax.append(xmax)
-                tmpymax.append(ymax)
+        # if len(root.findall('object'))!=1:  #single complex
+        #     tmpxmin=[]
+        #     tmpymin=[]
+        #     tmpxmax=[]
+        #     tmpymax=[]
+        #     flag=0
+        #     for obj in get(root, 'object'):
+        #         bndbox = get_and_check(obj, 'bndbox', 1)
+        #         xmin = int(get_and_check(bndbox, 'xmin', 1).text)
+        #         ymin = int(get_and_check(bndbox, 'ymin', 1).text)
+        #         xmax = int(get_and_check(bndbox, 'xmax', 1).text)
+        #         ymax = int(get_and_check(bndbox, 'ymax', 1).text)
+        #         assert (xmax > xmin)
+        #         assert (ymax > ymin)
+        #         tmpxmin.append(xmin)
+        #         tmpymin.append(ymin)
+        #         tmpxmax.append(xmax)
+        #         tmpymax.append(ymax)
 
-            for i in range(len(tmpxmin)):
-                for j in range(i+1,len(tmpxmin)):
-                    flag=isoverlap(tmpxmin[i],tmpymin[i],tmpxmax[i],tmpymax[i],tmpxmin[j],tmpymin[j],tmpxmax[j],tmpymax[j])
-                    if flag == 1:
-                        break
-                if flag == 1:
-                    break
-            if flag==1:
-                continue
+        #     for i in range(len(tmpxmin)):
+        #         for j in range(i+1,len(tmpxmin)):
+        #             flag=isoverlap(tmpxmin[i],tmpymin[i],tmpxmax[i],tmpymax[i],tmpxmin[j],tmpymin[j],tmpxmax[j],tmpymax[j])
+        #             if flag == 1:
+        #                 break
+        #         if flag == 1:
+        #             break
+        #     if flag==1:
+        #         continue
 
         #时间主要消耗在保存图片
         fig = cv2.imread(figname)
@@ -149,10 +149,10 @@ def convert(fig_names_all, xmldirs_all, fig_save):
                 # categories[category] = new_id
             category_id = categories[category]
             bndbox = get_and_check(obj, 'bndbox', 1)
-            xmin = int(get_and_check(bndbox, 'xmin', 1).text)
-            ymin = int(get_and_check(bndbox, 'ymin', 1).text)
-            xmax = int(get_and_check(bndbox, 'xmax', 1).text)
-            ymax = int(get_and_check(bndbox, 'ymax', 1).text)
+            xmin = int(float(get_and_check(bndbox, 'xmin', 1).text))
+            ymin = int(float(get_and_check(bndbox, 'ymin', 1).text))
+            xmax = int(float(get_and_check(bndbox, 'xmax', 1).text))
+            ymax = int(float(get_and_check(bndbox, 'ymax', 1).text))
             assert (xmax > xmin)
             assert (ymax > ymin)
             o_width = abs(xmax - xmin)
@@ -190,8 +190,8 @@ def convert_singleprocess(fig_names_all, xmldirs_all, fig_save,json_file):
         if len(root.findall('object'))==0:
             continue
 
-        if num == 10000:
-            break
+        # if num == 10000:
+        #     break
 
         if len(root.findall('object'))!=1:  #single complex
             tmpxmin=[]
@@ -280,112 +280,131 @@ def convert_singleprocess(fig_names_all, xmldirs_all, fig_save,json_file):
 
 if __name__ == '__main__':
 
-    READ_PATH = "/home/lishuang/Disk/shengshi_data/xilixiang"
-    json_file = "/home/lishuang/Disk/shengshi_data/xilixiang_coco/annotations/pascal_trainval0712.json"
-    fig_save="/home/lishuang/Disk/shengshi_data/xilixiang_coco/images"
+    READ_PATH = "/home/lishuang/Disk/shengshi_data/new_anti_tail"
+    json_file = "/home/lishuang/Disk/shengshi_data/new_anti_tail/json/pascal_train.json"
+    fig_save="/home/lishuang/Disk/shengshi_data/new_anti_tail/cocoimage"
 
     fig_names_all = []
     xmldirs_all = []
     xml_names_all = []
     save_roiimage_paths_all = []
     starttime = time.time()
-    for dir in subdirs(READ_PATH):
-        FigDirectory = os.path.join(READ_PATH, dir, 'JPEGImages')
-        XmlDirectory = os.path.join(READ_PATH, dir, 'Annotations')
+    # for dir in subdirs(READ_PATH):
+    #     FigDirectory = os.path.join(READ_PATH, dir, 'JPEGImages')
+    #     XmlDirectory = os.path.join(READ_PATH, dir, 'Annotations')
 
-        fig_names = []
-        xmldirs = []
-        tag = '.jpg'
-        for file in subfiles(FigDirectory):
-            # for file in os.listdir(DirectoryPath):
-            file_path = os.path.join(FigDirectory, file)
-            if os.path.splitext(file_path)[1] == tag:
-                fig_names.append(file_path)
+    #     fig_names = []
+    #     xmldirs = []
+    #     tag = '.jpg'
+    #     for file in subfiles(FigDirectory):
+    #         # for file in os.listdir(DirectoryPath):
+    #         file_path = os.path.join(FigDirectory, file)
+    #         if os.path.splitext(file_path)[1] == tag:
+    #             fig_names.append(file_path)
 
-                files = os.path.basename(file_path)  # get file name
-                filename = os.path.splitext(files)[0]  # file's name
-                xmldir = os.path.join(XmlDirectory, filename + '.xml')
-                xmldirs.append(xmldir)
+    #             files = os.path.basename(file_path)  # get file name
+    #             filename = os.path.splitext(files)[0]  # file's name
+    #             xmldir = os.path.join(XmlDirectory, filename + '.xml')
+    #             xmldirs.append(xmldir)
 
-        fig_names_all.extend(fig_names)
-        xmldirs_all.extend(xmldirs)
+    #     fig_names_all.extend(fig_names)
+    #     xmldirs_all.extend(xmldirs)
 
+    FigDirectory = os.path.join(READ_PATH, 'JPEGImages')
+    XmlDirectory = os.path.join(READ_PATH, 'Annotations')
+
+    fig_names = []
+    xmldirs = []
+    tag = '.jpg'
+    for file in subfiles(FigDirectory):
+        # for file in os.listdir(DirectoryPath):
+        file_path = os.path.join(FigDirectory, file)
+        if os.path.splitext(file_path)[1] == tag:
+            fig_names.append(file_path)
+
+            files = os.path.basename(file_path)  # get file name
+            filename = os.path.splitext(files)[0]  # file's name
+            xmldir = os.path.join(XmlDirectory, filename + '.xml')
+            xmldirs.append(xmldir)
+
+    fig_names_all.extend(fig_names)
+    xmldirs_all.extend(xmldirs)
     print("time=", time.time() - starttime)
 
     # convert_singleprocess(fig_names_all, xmldirs_all, fig_save,json_file)  #singleprocess
 
     #多进程读写文件（I/O密集型），瓶颈在磁盘寻址速度上，和单进程读写文件速度相差不大
 
-    # starttime = time.time()
-    # cpu_num_process=6
-    # num_process = 512
-    # avg = int(len(fig_names_all) / num_process)
-    # late = len(fig_names_all) % num_process
-    # p = Pool(cpu_num_process)
-    # res_l = []
-    # for i in range(num_process):
-    #     start = i * avg
-    #     if i == num_process - 1:
-    #         end = (i + 1) * avg + late
-    #     else:
-    #         end = (i + 1) * avg
-    #     fig_names_all_now = fig_names_all[start:end]
-    #     xmldirs_all_now = xmldirs_all[start:end]
-    #     arglist = [fig_names_all_now, xmldirs_all_now,fig_save]
-    #     result = p.apply_async(convert_thread, args=(arglist,))
-    #     res_l.append(result)
-    # p.close()
-    # p.join()
+    starttime = time.time()
+    cpu_num_process=6
+    num_process = 12
+    avg = int(len(fig_names_all) / num_process)
+    late = len(fig_names_all) % num_process
+    p = Pool(cpu_num_process)
+    res_l = []
+    for i in range(num_process):
+        start = i * avg
+        if i == num_process - 1:
+            end = (i + 1) * avg + late
+        else:
+            end = (i + 1) * avg
+        fig_names_all_now = fig_names_all[start:end]
+        xmldirs_all_now = xmldirs_all[start:end]
+        arglist = [fig_names_all_now, xmldirs_all_now,fig_save]
+        result = p.apply_async(convert_thread, args=(arglist,))
+        res_l.append(result)
+    p.close()
+    p.join()
 
-    # print("process time=", time.time() - starttime)
+    print("process time=", time.time() - starttime)
     
-    # images_all=[]
-    # annotations_all=[]
-    # for res in res_l:
-    #     images, annotations =res.get()
-    #     images_all.extend(images)
-    #     annotations_all.extend(annotations)
+    images_all=[]
+    annotations_all=[]
+    for res in res_l:
+        images, annotations =res.get()
+        images_all.extend(images)
+        annotations_all.extend(annotations)
 
-    # imagename={}
-    # print("image num = ",len(images_all))
-    # starttime = time.time()
-    # for i in range(len(images_all)):
-    #     images_all[i]['id']=i+1
-    #     imagename[images_all[i]['file_name']]=images_all[i]['id']
+    imagename={}
+    print("image num = ",len(images_all))
+    starttime = time.time()
+    for i in range(len(images_all)):
+        images_all[i]['id']=i+1
+        imagename[images_all[i]['file_name']]=images_all[i]['id']
 
-    # print("images_all time=", time.time() - starttime)
+    print("images_all time=", time.time() - starttime)
 
-    # starttime = time.time()
-    # for i in range(len(annotations_all)):
-    #     annotations_all[i]['image_id']=imagename[annotations_all[i]['file_name']]
-    #     annotations_all[i]['id']=i+1
-    #     del annotations_all[i]['file_name']
+    starttime = time.time()
+    for i in range(len(annotations_all)):
+        annotations_all[i]['image_id']=imagename[annotations_all[i]['file_name']]
+        annotations_all[i]['id']=i+1
+        del annotations_all[i]['file_name']
 
-    # print("annotations_all time=", time.time() - starttime)
+    print("annotations_all time=", time.time() - starttime)
 
 
-    # json_dict = {"images": [], "annotations": [],  # ls
-    #              "categories": []}  # ls
+    json_dict = {"images": [], "annotations": [],  # ls
+                 "categories": []}  # ls
 
-    # json_dict['annotations']=annotations_all
-    # json_dict['images'] = images_all
-    # categories = PRE_DEFINE_CATEGORIES
-    # for cate, cid in categories.items():
-    #     cat = {'supercategory': 'none', 'id': cid, 'name': cate}
-    #     json_dict['categories'].append(cat)
-    # json_fp = open(json_file, 'w')
-    # json_str = json.dumps(json_dict)
-    # json_fp.write(json_str)
-    # json_fp.close()
+    json_dict['annotations']=annotations_all
+    json_dict['images'] = images_all
+    categories = PRE_DEFINE_CATEGORIES
+    for cate, cid in categories.items():
+        cat = {'supercategory': 'none', 'id': cid, 'name': cate}
+        json_dict['categories'].append(cat)
+    json_fp = open(json_file, 'w')
+    json_str = json.dumps(json_dict)
+    json_fp.write(json_str)
+    json_fp.close()
 
-    # print("end")
+    print("end")
 
     # json_file = "/home/lishuang/Disk/shengshi_data/split/dataset_Tk1_beijing_single/voc/annotations/pascal_trainval0712.json"
     # fig_save="/home/lishuang/Disk/shengshi_data/split/dataset_Tk1_beijing_single/voc/images"
     # json_file = "/home/lishuang/Disk/shengshi_data/split/Tk1_Train_data_single/voc/annotations/pascal_trainval0712.json"
     # fig_save="/home/lishuang/Disk/shengshi_data/split/Tk1_Train_data_single/voc/images"
 
-    starttime = time.time()
-    convert_singleprocess(fig_names_all, xmldirs_all, fig_save,json_file)  #singleprocess
-    print("single process time=", time.time() - starttime)
+    # starttime = time.time()
+    # convert_singleprocess(fig_names_all, xmldirs_all, fig_save,json_file)  #singleprocess
+    # print("single process time=", time.time() - starttime)
 
