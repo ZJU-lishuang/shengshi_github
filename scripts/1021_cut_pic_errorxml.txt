@@ -1,7 +1,0 @@
-/home/lishuang/Disk/shengshi_data/机场行李箱数据/xili/JPEGImages/turn152_img11430.jpg
-/home/lishuang/Disk/shengshi_data/机场行李箱数据/xili/JPEGImages/turn15011_img14475.jpg
-/home/lishuang/Disk/shengshi_data/机场行李箱数据/xili/JPEGImages/turn15021_img10275.jpg
-/home/lishuang/Disk/shengshi_data/机场行李箱数据/xili/JPEGImages/turn152_img10110.jpg
-/home/lishuang/Disk/shengshi_data/机场行李箱数据/xili/JPEGImages/turn15021_img10260.jpg
-/home/lishuang/Disk/shengshi_data/机场行李箱数据/xili/JPEGImages/turn152_img9660.jpg
-3.5355339059327378
