@@ -6,6 +6,7 @@ from os.path import join
 from PIL import Image
 import cv2
 import xml.dom.minidom
+import numpy as np
 
 class boxstru:
     def __init__(self):
@@ -74,6 +75,7 @@ def check_dir(dir):
 
 def cut_xml(fig_names_all,xml_names_all,save_roiimage_paths):
     fig_num=len(fig_names_all)
+    jitter=0.3
     for i in range(len(fig_names_all)):
         xml_name = xml_names_all[i] # get absolute directory of relevant XML file's
         if not os.path.exists(xml_name):
@@ -91,6 +93,7 @@ def cut_xml(fig_names_all,xml_names_all,save_roiimage_paths):
         value = ReadXml(xml_name)  # read XML file from original directory
         boxnum=0
         for ibox in range(len(value.box)):
+            #ori
             xmin = value.box[ibox].xmin
             ymin =  value.box[ibox].ymin
             xmax = value.box[ibox].xmax
@@ -101,26 +104,60 @@ def cut_xml(fig_names_all,xml_names_all,save_roiimage_paths):
             bheight=ymax-ymin
             bwidth=xmax-xmin
 
-            scalexmin=xmin-0.5*bwidth
-            scaleymin=ymin-0.5*bheight
-            scalexmax=xmax+0.5*bwidth
-            scaleymax = ymax + 0.5 * bheight
+            #scale
+            scalexmin=xmin-0.3*bwidth
+            scaleymin=ymin-0.3*bheight
+            scalexmax=xmax+0.3*bwidth
+            scaleymax = ymax + 0.3 * bheight
 
             bxmin=max(0,int(scalexmin))
             bymin=max(0,int(scaleymin))
             bxmax=min(width,int(scalexmax))
             bymax=min(height,int(scaleymax))
 
+            #crop
+            cropxmin = scalexmin
+            cropxmax = scalexmax
+            cropymin = scaleymin
+            cropymax = scaleymax
+            cropheight = cropymax - cropymin
+            cropwidth = cropxmax - cropxmin
 
-            roi_image = fig[bymin:bymax, bxmin:bxmax]
+            dw = cropwidth * jitter
+            dh = cropheight * jitter
+            pleft = np.random.randint(-dw, dw + 1)
+            pright = np.random.randint(-dw, dw + 1)
+            ptop = np.random.randint(-dh, dh + 1)
+            pbot = np.random.randint(-dh, dh + 1)
 
-            roi_image_name=imagename+'img_'+str(boxnum)+'_'+name+'.jpg'
+            pxmin = cropxmin - pleft
+            pxmax = cropxmax + pright
+            pymin = cropymin - ptop
+            pymax = cropymax + pbot
+
+            pxmin = max(0, int(pxmin))
+            pymin = max(0, int(pymin))
+            pxmax = min(width, int(pxmax))
+            pymax = min(height, int(pymax))
+
+            #image
+            roi_image_scale = fig[bymin:bymax, bxmin:bxmax]
+            roi_image_ori=fig[ymin:ymax, xmin:xmax]
+            roi_image_crop = fig[pymin:pymax, pxmin:pxmax]
 
             check_dir(os.path.join(save_roiimage_paths,name))
 
-            save_roiimage_path=os.path.join(save_roiimage_paths,name,roi_image_name)
+            roi_image_scale_name = imagename + 'imgscale_' + str(boxnum) + '_' + name + '.jpg'
+            roi_image_ori_name = imagename + 'imgori_' + str(boxnum) + '_' + name + '.jpg'
+            roi_image_crop_name = imagename + 'imgcrop_' + str(boxnum) + '_' + name + '.jpg'
 
-            cv2.imwrite(save_roiimage_path, roi_image)
+            save_roiimage_scale_path=os.path.join(save_roiimage_paths,name,roi_image_scale_name)
+            save_roiimage_ori_path = os.path.join(save_roiimage_paths, name, roi_image_ori_name)
+            save_roiimage_crop_path = os.path.join(save_roiimage_paths, name, roi_image_crop_name)
+
+            cv2.imwrite(save_roiimage_scale_path, roi_image_scale)
+            cv2.imwrite(save_roiimage_ori_path, roi_image_ori)
+            cv2.imwrite(save_roiimage_crop_path, roi_image_crop)
 
 def subfiles(path):
     """Yield directory names not starting with '.' under given path."""
