@@ -7,7 +7,7 @@ import xml.etree.ElementTree as ET
 
 from multiprocessing import Pool
 
-PRE_DEFINE_CATEGORIES = {"1": 1,"2": 2 ,"3": 3,"4": 4 ,"5": 5 ,"字符" : 1}
+PRE_DEFINE_CATEGORIES = {"1": 1,"2": 2 ,"3": 3,"4": 4 ,"5": 5 }
 START_BOUNDING_BOX_ID = 1
 
 
@@ -119,7 +119,7 @@ def convert(fig_names_all, xmldirs_all, fig_save):
 
         #时间主要消耗在保存图片
         fig = cv2.imread(figname)
-        cv2.imwrite(os.path.join(fig_save, files), fig)
+        # cv2.imwrite(os.path.join(fig_save, files), fig)
 
         ## The filename must be a number
         # filename = line[:-4]
@@ -157,8 +157,9 @@ def convert(fig_names_all, xmldirs_all, fig_save):
             assert (ymax > ymin)
             o_width = abs(xmax - xmin)
             o_height = abs(ymax - ymin)
+            area_size=o_width*o_height
             ann = {'iscrowd': 0, 'file_name': files,'image_id':
-                image_id, 'bbox': [xmin, ymin, o_width, o_height],
+                image_id, 'bbox': [xmin, ymin, o_width, o_height],'area':area_size,
                    'category_id': category_id, 'id': bnd_id, 'ignore': 0}
             annotationstmp.append(ann)
             bnd_id = bnd_id + 1
@@ -281,7 +282,7 @@ def convert_singleprocess(fig_names_all, xmldirs_all, fig_save,json_file):
 if __name__ == '__main__':
 
     READ_PATH = "/home/lishuang/Disk/shengshi_data/new_anti_tail"
-    json_file = "/home/lishuang/Disk/shengshi_data/new_anti_tail/json/pascal_train.json"
+    json_file = "/home/lishuang/Disk/shengshi_data/new_anti_tail/json/pascal_trainmin.json"
     fig_save="/home/lishuang/Disk/shengshi_data/new_anti_tail/cocoimage"
 
     fig_names_all = []
@@ -310,8 +311,8 @@ if __name__ == '__main__':
     #     fig_names_all.extend(fig_names)
     #     xmldirs_all.extend(xmldirs)
 
-    FigDirectory = os.path.join(READ_PATH, 'JPEGImages')
-    XmlDirectory = os.path.join(READ_PATH, 'Annotations')
+    FigDirectory = os.path.join(READ_PATH, 'JPEGImagesmin')
+    XmlDirectory = os.path.join(READ_PATH, 'Annotations_1_2')
 
     fig_names = []
     xmldirs = []
