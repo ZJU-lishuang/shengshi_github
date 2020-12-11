@@ -39,11 +39,10 @@ docker build -t 192.168.112.15:5000/algorithm/torch1.7-cuda10.1-cudnn7-devel:spa
 docker build -t 192.168.112.15:5000/algorithm/torch1.7-cuda10.1-cudnn7-devel:sparsercnn .
 docker build -t 192.168.112.15:5000/algorithm/torch-1.6.0-cuda10.1-cudnn7-devel:sparsercnn .
 推送镜像
-docker push 192.168.112.15:5000/algorithm/torch1.7-cuda10.1-cudnn7-devel:sparsercnn
-docker push 192.168.112.15:5000/algorithm/pytorch-1.6.0-cuda10.1-cudnn7-devel:sparsercnnv2
+docker push 192.168.112.15:5000/algorithm/torch1.7-cuda10.1-cudnn7-devel:sparsercnnv2
+docker push 192.168.112.15:5000/algorithm/torch-1.6.0-cuda10.1-cudnn7-devel:sparsercnnv2
 注册登录镜像仓库
 docker login 192.168.112.15
 
-    fd_event_list = self._poll.poll(timeout) pid, sts = os.waitpid(self.pid, flag)
 
     

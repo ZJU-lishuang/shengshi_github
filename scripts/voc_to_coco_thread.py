@@ -7,7 +7,8 @@ import xml.etree.ElementTree as ET
 
 from multiprocessing import Pool
 
-PRE_DEFINE_CATEGORIES = {"1": 1,"2": 2 ,"3": 3,"4": 4 ,"5": 5 }
+# PRE_DEFINE_CATEGORIES = {"1": 1,"2": 2 ,"3": 3,"4": 4 ,"5": 5 }
+PRE_DEFINE_CATEGORIES = {"1": 1}
 START_BOUNDING_BOX_ID = 1
 
 
@@ -75,6 +76,7 @@ def convert(fig_names_all, xmldirs_all, fig_save):
         xml_f = xmldirs_all[i]
         figname = fig_names_all[i]
         files = os.path.basename(figname)
+        files=os.path.join(figname.split('/')[-3],figname.split('/')[-2],files)
 
         # print(os.path.basename(fig_names_all[0]),"start xml_f=",xml_f)
         tree = ET.parse(xml_f)
@@ -118,7 +120,7 @@ def convert(fig_names_all, xmldirs_all, fig_save):
         #         continue
 
         #时间主要消耗在保存图片
-        fig = cv2.imread(figname)
+        # fig = cv2.imread(figname)
         # cv2.imwrite(os.path.join(fig_save, files), fig)
 
         ## The filename must be a number
@@ -281,8 +283,8 @@ def convert_singleprocess(fig_names_all, xmldirs_all, fig_save,json_file):
 
 if __name__ == '__main__':
 
-    READ_PATH = "/home/lishuang/Disk/shengshi_data/new_anti_tail"
-    json_file = "/home/lishuang/Disk/shengshi_data/new_anti_tail/json/pascal_trainmin.json"
+    READ_PATH = "/home/lishuang/Disk/shengshi_data/anti_tail_train_dataset/整理后的防尾随数据归档/防尾随数据归档/Train_data"
+    json_file = "/home/lishuang/Disk/shengshi_data/anti_tail_train_dataset/整理后的防尾随数据归档/防尾随数据归档/json/pascal_train.json"
     fig_save="/home/lishuang/Disk/shengshi_data/new_anti_tail/cocoimage"
 
     fig_names_all = []
@@ -290,46 +292,47 @@ if __name__ == '__main__':
     xml_names_all = []
     save_roiimage_paths_all = []
     starttime = time.time()
-    # for dir in subdirs(READ_PATH):
-    #     FigDirectory = os.path.join(READ_PATH, dir, 'JPEGImages')
-    #     XmlDirectory = os.path.join(READ_PATH, dir, 'Annotations')
+    for dir in subdirs(READ_PATH):
+        FigDirectory = os.path.join(READ_PATH, dir, 'JPEGImages')
+        XmlDirectory = os.path.join(READ_PATH, dir, 'Annotations')
 
-    #     fig_names = []
-    #     xmldirs = []
-    #     tag = '.jpg'
-    #     for file in subfiles(FigDirectory):
-    #         # for file in os.listdir(DirectoryPath):
-    #         file_path = os.path.join(FigDirectory, file)
-    #         if os.path.splitext(file_path)[1] == tag:
-    #             fig_names.append(file_path)
+        fig_names = []
+        xmldirs = []
+        tag = '.jpg'
+        for file in subfiles(FigDirectory):
+            # for file in os.listdir(DirectoryPath):
+            file_path = os.path.join(FigDirectory, file)
+            if os.path.splitext(file_path)[1] == tag:
+                fig_names.append(file_path)
 
-    #             files = os.path.basename(file_path)  # get file name
-    #             filename = os.path.splitext(files)[0]  # file's name
-    #             xmldir = os.path.join(XmlDirectory, filename + '.xml')
-    #             xmldirs.append(xmldir)
+                files = os.path.basename(file_path)  # get file name
+                filename = os.path.splitext(files)[0]  # file's name
+                xmldir = os.path.join(XmlDirectory, filename + '.xml')
+                xmldirs.append(xmldir)
 
-    #     fig_names_all.extend(fig_names)
-    #     xmldirs_all.extend(xmldirs)
+        fig_names_all.extend(fig_names)
+        xmldirs_all.extend(xmldirs)
 
-    FigDirectory = os.path.join(READ_PATH, 'JPEGImagesmin')
-    XmlDirectory = os.path.join(READ_PATH, 'Annotations_1_2')
+    # FigDirectory = os.path.join(READ_PATH, 'JPEGImagesmin')
+    # XmlDirectory = os.path.join(READ_PATH, 'Annotations_1_2')
 
-    fig_names = []
-    xmldirs = []
-    tag = '.jpg'
-    for file in subfiles(FigDirectory):
-        # for file in os.listdir(DirectoryPath):
-        file_path = os.path.join(FigDirectory, file)
-        if os.path.splitext(file_path)[1] == tag:
-            fig_names.append(file_path)
+    # fig_names = []
+    # xmldirs = []
+    # tag = '.jpg'
+    # for file in subfiles(FigDirectory):
+    #     # for file in os.listdir(DirectoryPath):
+    #     file_path = os.path.join(FigDirectory, file)
+    #     if os.path.splitext(file_path)[1] == tag:
+    #         fig_names.append(file_path)
 
-            files = os.path.basename(file_path)  # get file name
-            filename = os.path.splitext(files)[0]  # file's name
-            xmldir = os.path.join(XmlDirectory, filename + '.xml')
-            xmldirs.append(xmldir)
+    #         files = os.path.basename(file_path)  # get file name
+    #         filename = os.path.splitext(files)[0]  # file's name
+    #         xmldir = os.path.join(XmlDirectory, filename + '.xml')
+    #         xmldirs.append(xmldir)
 
-    fig_names_all.extend(fig_names)
-    xmldirs_all.extend(xmldirs)
+    # fig_names_all.extend(fig_names)
+    # xmldirs_all.extend(xmldirs)
+
     print("time=", time.time() - starttime)
 
     # convert_singleprocess(fig_names_all, xmldirs_all, fig_save,json_file)  #singleprocess
