@@ -64,7 +64,7 @@ def cvat2txt(class_name_path,imgdir,txtdir,img_name,value):
     for obj in bndboxs:
         x, y, x2, y2 = obj['bbox']
         class_name = obj['label']
-        class_name.replace("载人", "") #merge two labels
+        class_name=class_name.replace("载人", "") #merge two labels
 
         if class_name not in classes_dict:
             print(f"{obj['label']} is not in classes_dict")
