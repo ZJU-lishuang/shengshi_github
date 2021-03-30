@@ -1,0 +1,20 @@
+{
+  "img": "-nfs-交通项目-智能相机-车辆多属性-皮卡-皮卡-115.jpg",
+  "imgWidth": 220,
+  "imgHeight": 165,
+  "anns": [
+    {
+      "bbox": [
+        2.0,
+        24.0,
+        216.0,
+        111.0
+      ],
+      "category_id": 0,
+      "id": 2,
+      "image_id": 1,
+      "iscrowd": 0,
+      "name": "汽车"
+    }
+  ]
+}

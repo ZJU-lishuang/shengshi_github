@@ -1,0 +1,24 @@
+{
+    "filename": "sample/yolo/JPEGImages/turn152_img840.jpg",
+    "imageData": null,
+    "imgHeight": 720,
+    "imgWidth": 1280,
+    "version": "v1.0",
+    "flags": {},
+    "shapes": [
+        {
+            "label": "1",
+            "points": [
+                [
+                    1001,
+                    12
+                ],
+                [
+                    1221,
+                    174
+                ]
+            ],
+            "shape_type": "rectangle"
+        }
+    ]
+}

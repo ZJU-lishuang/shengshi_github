@@ -1,0 +1,2 @@
+/home/lishuang/Disk/shengshi_github/scripts/data_analysis/sample/yolo/image/-nfs-交通项目-智能相机-侧打卡口-待上传-daytime-head-wuhuang-expressway-20200429-2-20200429133607_219_daytime-head_wuhuang-expressway.jpg
+/home/lishuang/Disk/shengshi_github/scripts/data_analysis/sample/yolo/image/-nfs-交通项目-智能相机-车辆多属性-皮卡-皮卡-115.jpg

@@ -1,0 +1,2 @@
+sample/yolo/JPEGImages/turn152_img840.jpg
+sample/yolo/JPEGImages/turn152_img855.jpg

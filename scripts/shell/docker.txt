@@ -31,7 +31,9 @@ docker run --gpus all --rm -p 8444:3000 -it --ipc=host -v /home/lishuang/Disk/gi
 docker run --gpus all --rm -p 8444:3000 -it --ipc=host -v /home/lishuang/Disk/gitlab/traincode/SparseR-CNN:/home/jovyan/SparseR-CNN a5b566c96a5f  /bin/bash
 
 docker commit 24bf0bb19457 torch1.7-cuda10.1-cudnn7-devel:sparsercnnv2
-docker build -t 192.168.112.15:5000/algorithm/torch1.7-cuda10.1-cudnn7-devel:sparsercnnv2 .
+docker build -t 192.168.113.13:5000/algorithm/torch1.7.1-cuda11-cudnn8-devel:torchv1 .
+docker push 192.168.113.13:5000/algorithm/torch1.7.1-cuda11-cudnn8-devel:torchv1
+docker run --gpus all --rm -p 8444:3000 -it --ipc=host 192.168.113.13:5000/algorithm/torch1.7.1-cuda11-cudnn8-devel:torch  /bin/bash
 
 192.168.112.15:5000/algorithm/torch1.7-cuda10.1-cudnn7-devel:sparsercnnv2
 192.168.112.15:5000/algorithm/torch-1.6.0-cuda10.1-cudnn7-devel:sparsercnnv2
@@ -42,7 +44,7 @@ docker build -t 192.168.112.15:5000/algorithm/torch-1.6.0-cuda10.1-cudnn7-devel:
 docker push 192.168.112.15:5000/algorithm/torch1.7-cuda10.1-cudnn7-devel:sparsercnnv2
 docker push 192.168.112.15:5000/algorithm/torch-1.6.0-cuda10.1-cudnn7-devel:sparsercnnv2
 注册登录镜像仓库
-docker login 192.168.112.15
+docker login 192.168.113.13:5000
 
 
     
