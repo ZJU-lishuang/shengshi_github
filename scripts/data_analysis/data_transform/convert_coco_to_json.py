@@ -21,12 +21,28 @@ def cati2name(coco):
         classes[cat['id']] = cat['name']
     return classes
 
+def has_file_allowed_extension(filename, extensions):
+    """Checks if a file is an allowed extension.
+
+    Args:
+        filename (string): path to a file
+
+    Returns:
+        bool: True if the filename ends with a known image extension
+    """
+    filename_lower = filename.lower()#转换字符串中所有大写字符为小写
+    return any(filename_lower.endswith(ext) for ext in extensions)
 
 def get_img_info(img, coco, classes, json_dir):
     file_name = img['file_name']
     ann_ids = coco.getAnnIds(imgIds=img['id'], iscrowd=None)
     anns = coco.loadAnns(ann_ids)
-    json_path = os.path.join(json_dir, file_name).replace(".jpg", ".json")
+    extensions = ['.jpg', '.jpeg', '.png', '.ppm', '.bmp', '.pgm', '.tif']
+    stem, suffix = os.path.splitext(file_name)
+    if has_file_allowed_extension(file_name, extensions):
+        json_path = os.path.join(json_dir, file_name).replace(suffix, ".json")
+    else:
+        assert 0,f"error filename {file_name}"
     img_info = {}
     img_info['img'] = file_name
     img_info['imgWidth'] = img['width']
