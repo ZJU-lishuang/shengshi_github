@@ -45,7 +45,8 @@ def main():
     annotations = []
     for img_file in tqdm(img_files):
         img_name=os.path.basename(img_file)
-        txt_file=img_file.replace(".jpg",".txt").replace(image_folder,txt_folder)
+        stem, suffix = os.path.splitext(img_name)
+        txt_file=img_file.replace(suffix,".txt").replace(image_folder,txt_folder)
         cur_image = cv2.imread(img_file)
         h,w,c=cur_image.shape
         image = {}
