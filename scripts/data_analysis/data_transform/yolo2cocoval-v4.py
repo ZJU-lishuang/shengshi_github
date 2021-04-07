@@ -31,22 +31,22 @@ def main():
         with open(txt_file, 'r') as f:
             l = np.array([x.split() for x in f.read().strip().splitlines()], dtype=np.float32)  # labels
         if len(l):
-            assert l.shape[1] == 6, 'labels require 6 columns each'
+            assert l.shape[1] == 6, 'labels require 5 columns each'
             assert (l >= 0).all(), 'negative labels'
             assert (l[:, 1:] <= 1).all(), 'non-normalized or out of bounds coordinate labels'
             assert np.unique(l, axis=0).shape[0] == l.shape[0], 'duplicate labels'
         else:
             l = np.zeros((0, 6), dtype=np.float32)
 
-        for single_l in l:  #yolov5-v2
+        for single_l in l: # cls, *xywh, conf  yolov5-v4
             class_idx = int(single_l[0])
-            cx, cy, bw, bh = single_l[2:]
+            cx, cy, bw, bh = single_l[1:5]
             box = np.array([cx * w, cy * h, w * bw, h * bh])
             box[:2] -= box[2:] / 2  # xy center to top-left corner
             jdict.append({'image_id': img_id,
                           'category_id': class_idx,
                           'bbox': [round(x, 3) for x in box],
-                          'score': round(single_l[1].tolist(), 5)})
+                          'score': round(single_l[5].tolist(), 5)})
     with open(pred_json, 'w') as f:
         json.dump(jdict, f)
 
