@@ -83,9 +83,10 @@ def voc_eval(detpath,
     class_recs = {}  # 保存的是 Ground Truth的数据
     npos = 0
 
-    imagenames=annopath.imgToAnns
-    for imageid in imagenames:
-        R=[ann for ann in imagenames[imageid] if ann['category_id']==classname]
+    imagenames = annopath.imgToAnns
+    for imgdict in annopath.imgs:
+        imageid=annopath.imgs[imgdict]['id']
+        R = [ann for ann in imagenames[imageid] if ann['category_id'] == classname]
         bbox = np.array([x['bbox'] for x in R])
         #  different基本都为0/False.
         difficult = np.array([x['iscrowd'] for x in R]).astype(np.bool)
@@ -94,8 +95,9 @@ def voc_eval(detpath,
 
         # 记录Ground Truth的内容
         class_recs[imageid] = {'bbox': bbox,
-                                 'difficult': difficult,
-                                 'det': det}
+                               'difficult': difficult,
+                               'det': det}
+
 
     image_ids=[]
     confidence=[]
