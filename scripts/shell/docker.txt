@@ -33,7 +33,11 @@ docker run --gpus all --rm -p 8444:3000 -it --ipc=host -v /home/lishuang/Disk/gi
 docker commit 24bf0bb19457 torch1.7-cuda10.1-cudnn7-devel:sparsercnnv2
 docker build -t 192.168.113.13:5000/algorithm/torch1.7.1-cuda11-cudnn8-devel:torchv1 .
 docker push 192.168.113.13:5000/algorithm/torch1.7.1-cuda11-cudnn8-devel:torchv1
-docker run --gpus all --rm -p 8444:3000 -it --ipc=host 192.168.113.13:5000/algorithm/torch1.7.1-cuda11-cudnn8-devel:torch  /bin/bash
+docker run --gpus all --rm -p 8444:3000 -it --ipc=host 192.168.113.13:5000/algorithm/torch1.7.1-cuda11-cudnn8-devel:torchv1  /bin/bash
+
+docker build -t 192.168.113.13:5000/algorithm/torch1.7.1-cuda101-cudnn7-devel:torchv3 .
+docker push 192.168.113.13:5000/algorithm/torch1.7.1-cuda101-cudnn7-devel:torchv3
+docker run --gpus all --rm -p 8444:3000 -it --ipc=host 192.168.113.13:5000/algorithm/torch1.7.1-cuda101-cudnn7-devel:torchv3 /bin/bash
 
 192.168.112.15:5000/algorithm/torch1.7-cuda10.1-cudnn7-devel:sparsercnnv2
 192.168.112.15:5000/algorithm/torch-1.6.0-cuda10.1-cudnn7-devel:sparsercnnv2
