@@ -35,12 +35,16 @@ def box_iou(box1, box2):
 def filter_anns(img_anns,catId,scorethr=0.05):
     select_anns=[]
     if len(img_anns) > 0 and 'score' in img_anns[0]:
+        scores=[]
         for img_ann in img_anns:
             if img_ann['category_id'] == catId and img_ann['score'] > scorethr:
                 x1, y1, w, h = img_ann['bbox']
                 x2 = x1 + w
                 y2 = y1 + h
                 select_anns.append([x1, y1, x2, y2])
+                scores.append(img_ann['score'])
+        inds = np.argsort([-d for d in scores], kind='mergesort')
+        select_anns = [select_anns[i] for i in inds]
     else:
         for img_ann in img_anns:
             if img_ann['category_id'] == catId:

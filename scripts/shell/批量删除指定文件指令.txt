@@ -1,1 +1,2 @@
 find . -name "*.png" | xargs rm -rf
+find . -name "*.jpg" | xargs rm -rf
