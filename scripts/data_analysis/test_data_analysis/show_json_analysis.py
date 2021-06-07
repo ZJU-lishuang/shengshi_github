@@ -228,7 +228,31 @@ def analyze_individual_category(img_root,save_root,k,catId,cocoGt,cocoDt,scoreth
         img_class_save_dir=os.path.join(save_root, nm["name"])
         if not os.path.exists(img_class_save_dir):
             os.makedirs(img_class_save_dir)
-        tps,fps,fns=analyze_single_image_plus(img_path,img_class_save_dir,catId, gt_img_anns, dt_img_anns, scorethr,ovthresh)
+        # tps,fps,fns=analyze_single_image_plus(img_path,img_class_save_dir,catId, gt_img_anns, dt_img_anns, scorethr,ovthresh)
+        #new iou for detect result
+        select_dt_anns=[]
+        if len(dt_img_anns) > 0 :
+            for img_ann in dt_img_anns:
+                x1, y1, w, h = img_ann['bbox']
+                x2 = x1 + w
+                y2 = y1 + h
+                select_dt_anns.append([x1, y1, x2, y2])
+            ious = box_iou(torch.Tensor(select_dt_anns), torch.Tensor(select_dt_anns))  > ovthresh
+            delid=[]
+            for dt_index in range(len(select_dt_anns)):
+                for gt_index in range(len(select_dt_anns)):
+                    if gt_index <= dt_index:
+                        continue
+                    if gt_index in delid:
+                        continue
+                    if dt_img_anns[dt_index]['category_id']!=dt_img_anns[gt_index]['category_id']:
+                        continue
+                    if ious[dt_index,gt_index]:
+                        delid.append(gt_index)
+            dt_img_anns_filter=[dt_img_ann for id,dt_img_ann in enumerate(dt_img_anns) if id not in delid]
+        else:
+            dt_img_anns_filter=dt_img_anns
+        tps,fps,fns=analyze_single_image_plus(img_path,img_class_save_dir,catname,catId, gt_img_anns, dt_img_anns_filter, scorethr,ovthresh)
         total_tps+=tps
         total_fps+=fps
         total_fns+=fns
