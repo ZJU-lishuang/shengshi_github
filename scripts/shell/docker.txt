@@ -10,7 +10,6 @@ docker container stop 56dd5fb4e962
 #删除CONTAINER ID=56dd5fb4e962的容器
 docker container rm 56dd5fb4e962
 
-
 #删除image镜像
 docker rmi ID号
 
@@ -25,6 +24,23 @@ docker pull nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
 #启动docker image
 docker container run --gpus all --rm -p 8444:3000 -it --ipc=host -v /home/lishuang/Disk/github/docker/crowdpose:/home/lishuang/Disk/github/docker/crowdpose nvidia/cuda:9.0-cudnn7-runtime-ubuntu16.04  /bin/bash
 
+#使用dockerfile创建镜像
+docker build -t 192.168.112.15:5000/algorithm/torch1.7-cuda10.1-cudnn7-devel:sparsercnn .
+
+#推送镜像
+docker push 192.168.112.15:5000/algorithm/torch1.7-cuda10.1-cudnn7-devel:sparsercnnv2
+
+#注册登录镜像仓库
+docker login 192.168.113.13:5000
+
+#docker测试
+docker run --gpus all --rm -p 8444:3000 -it --ipc=host qqlishuang/pytorch:torch1.7.1-cuda101-cudnn7-devel  /bin/bash
+
+#已安装的镜像
+192.168.113.13:5000/algorithm/torch1.7.1-cuda101-cudnn7-devel:fastreid
+192.168.113.13:5000/algorithm/torch1.7.1-cuda110-cudnn8-devel:mmaction2
+
+----------------------------------------------------------------------------------------------------------------------------------
 
 docker run --gpus all --rm -p 8444:3000 -it --ipc=host -v /home/lishuang/Disk/gitlab/traincode/SparseR-CNN:/home/jovyan/SparseR-CNN 192.168.112.15:5000/library/pytorch-1.6.0-cuda10.1-cudnn7-devel:v2  /bin/bash
 
@@ -39,8 +55,9 @@ docker build -t 192.168.113.13:5000/algorithm/torch1.7.1-cuda101-cudnn7-devel:to
 docker push 192.168.113.13:5000/algorithm/torch1.7.1-cuda101-cudnn7-devel:torchv3
 docker run --gpus all --rm -p 8444:3000 -it --ipc=host 192.168.113.13:5000/algorithm/torch1.7.1-cuda101-cudnn7-devel:torchv3 /bin/bash
 
-192.168.112.15:5000/algorithm/torch1.7-cuda10.1-cudnn7-devel:sparsercnnv2
-192.168.112.15:5000/algorithm/torch-1.6.0-cuda10.1-cudnn7-devel:sparsercnnv2
+docker build -t 192.168.113.13:5000/algorithm/torch1.7.1-cuda101-cudnn7-devel:fastreid .
+docker push 192.168.113.13:5000/algorithm/torch1.7.1-cuda101-cudnn7-devel:fastreid
+
 使用dockerfile创建镜像
 docker build -t 192.168.112.15:5000/algorithm/torch1.7-cuda10.1-cudnn7-devel:sparsercnn .
 docker build -t 192.168.112.15:5000/algorithm/torch-1.6.0-cuda10.1-cudnn7-devel:sparsercnn .
@@ -49,6 +66,9 @@ docker push 192.168.112.15:5000/algorithm/torch1.7-cuda10.1-cudnn7-devel:sparser
 docker push 192.168.112.15:5000/algorithm/torch-1.6.0-cuda10.1-cudnn7-devel:sparsercnnv2
 注册登录镜像仓库
 docker login 192.168.113.13:5000
+
+#docker测试
+docker run --gpus all --rm -p 8444:3000 -it --ipc=host qqlishuang/pytorch:torch1.7.1-cuda101-cudnn7-devel  /bin/bash
 
 
     
