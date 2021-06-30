@@ -54,7 +54,7 @@ def filter_anns(img_anns,catId,scorethr=0.05):
                 select_anns.append([x1, y1, x2, y2])
     return select_anns
 
-def analyze_single_image_plus(img_path,img_save_path,catId,gt_img_anns,dt_img_anns,scorethr=0.05,iouthr=0.5):
+def analyze_single_image_plus(img_path,img_save_path,catname,catId,gt_img_anns,dt_img_anns,scorethr=0.05,iouthr=0.5):
     select_dt_anns=filter_anns(dt_img_anns,catId,scorethr)
     select_gt_anns = filter_anns(gt_img_anns,catId)
     iouThrs = [iouthr]
@@ -112,7 +112,7 @@ def analyze_single_image_plus(img_path,img_save_path,catId,gt_img_anns,dt_img_an
                     x,y,x2,y2=select_dt_anns[dt_index]
                     c1, c2 = (int(x), int(y)), (int(x2), int(y2))
                     cv2.rectangle(img, c1, c2, color, thickness=tl, lineType=cv2.LINE_AA)
-                    str=u"误检"
+                    strprint=u"误检-"+catname
                     # tf = max(tl - 1, 1)  # font thickness
                     # t_size = cv2.getTextSize(str, 0, fontScale=tl / 3, thickness=tf)[0]
                     # c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
@@ -126,14 +126,14 @@ def analyze_single_image_plus(img_path,img_save_path,catId,gt_img_anns,dt_img_an
                     font = ImageFont.truetype(fontpath, 40)
                     img_pil = Image.fromarray(img)
                     draw = ImageDraw.Draw(img_pil)
-                    label_size = draw.textsize(str, font)
+                    label_size = draw.textsize(strprint, font)
                     draw.rectangle(
                         [c1[0], c1[1], c1[0] + label_size[0], c1[1] - label_size[1]],
                         outline=tuple(color),
                         width=1,
                         fill=tuple(color)  # 用于填充
                     )
-                    draw.text((c1[0], c1[1] - 40), str, font=font, fill=(b, g, r))
+                    draw.text((c1[0], c1[1] - 40), strprint, font=font, fill=(b, g, r))
                     img = np.array(img_pil)
 
         fn_flag = False
@@ -145,7 +145,7 @@ def analyze_single_image_plus(img_path,img_save_path,catId,gt_img_anns,dt_img_an
                     x, y, x2, y2 = select_gt_anns[gt_index]
                     c1, c2 = (int(x), int(y)), (int(x2), int(y2))
                     cv2.rectangle(img, c1, c2, color, thickness=tl, lineType=cv2.LINE_AA)
-                    str = u"漏检"
+                    strprint = u"漏检-"+catname
                     # tf = max(tl - 1, 1)  # font thickness
                     # t_size = cv2.getTextSize(str, 0, fontScale=tl / 3, thickness=tf)[0]
                     # c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
@@ -159,14 +159,14 @@ def analyze_single_image_plus(img_path,img_save_path,catId,gt_img_anns,dt_img_an
                     font = ImageFont.truetype(fontpath, 40)
                     img_pil = Image.fromarray(img)
                     draw = ImageDraw.Draw(img_pil)
-                    label_size = draw.textsize(str, font)
+                    label_size = draw.textsize(strprint, font)
                     draw.rectangle(
                         [c1[0], c1[1], c1[0] + label_size[0], c1[1] - label_size[1]],
                         outline=tuple(color),
                         width=1,
                         fill=tuple(color) # 用于填充
                     )
-                    draw.text((c1[0], c1[1] - 40), str, font=font, fill=(b, g, r))
+                    draw.text((c1[0], c1[1] - 40), strprint, font=font, fill=(b, g, r))
                     img = np.array(img_pil)
         if fp_flag:
             img_fp_save_path = os.path.join(img_save_path, "误检")
@@ -183,9 +183,9 @@ def analyze_single_image_plus(img_path,img_save_path,catId,gt_img_anns,dt_img_an
 
     return tps,fps,fns
 
-
 def analyze_individual_category(img_root,save_root,k,catId,cocoGt,cocoDt,scorethr=0.05,ovthresh=0.5):
     nm = cocoGt.loadCats(catId)[0]
+    catname=nm["name"]
     print(f'--------------analyzing {k + 1}-{nm["name"]}---------------')
     single_class_outputs = {}
     imgIds = cocoGt.getImgIds()
