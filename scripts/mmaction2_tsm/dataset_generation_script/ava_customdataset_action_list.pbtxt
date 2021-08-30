@@ -1,0 +1,48 @@
+item {
+  name: "头撞墙"
+  id: 1
+}
+item {
+  name: "砸门"
+  id: 2
+}
+item {
+  name: "正常"
+  id: 3
+}
+item {
+  name: "扇巴掌"
+  id: 4
+}
+item {
+  name: "掐脖子"
+  id: 5
+}
+item {
+  name: "举高"
+  id: 6
+}
+item {
+  name: "撞桌"
+  id: 7
+}
+item {
+  name: "打斗"
+  id: 8
+}
+item {
+  name: "打滚"
+  id: 9
+}
+item {
+  name: "快速移动"
+  id: 10
+}
+item {
+  name: "举标语"
+  id: 11
+}
+item {
+  name: "发传单"
+  id: 12
+}

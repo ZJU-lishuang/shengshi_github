@@ -1,0 +1,31 @@
+第一步
+将标注数据的形式整理成data-vol-1/action_dataset/文件夹中的形式。
+其中视频放在videos文件夹里面，标注放在annotations文件夹里面，其中标注文件是一个视频对应多个xml的形式，视频名称和对应的标注文件夹的名称要一样。
+这个需要数据标注平台下载的时候选择对应的导出格式。
+
+第二步
+使用指令
+python gen_label_ava.py
+生成需要的标注文件
+
+第三步
+使用指令
+python vid2img_ava.py
+将长视频分割成需要的短视频
+
+第四步
+使用指令
+bash build_rawframes.sh
+将短视频转为逐帧的图片
+
+第五步
+使用指令
+python vid2img_kinetics_list.py result_video_track_addv1/ result_video_track_addv1_txt/
+生成各个类别的文件列表
+
+第六步
+使用指令
+python gen_label_kinetics.py
+使用生成的文件列表生成训练格式的文件列表
+
+此时，文件夹result_rawframes_track_addv1和result_video_track_addv1_trainval中生成了训练所需要格式的数据

@@ -24,6 +24,10 @@ docker pull nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
 #启动docker image
 docker container run --gpus all --rm -p 8444:3000 -it --ipc=host -v /home/lishuang/Disk/github/docker/crowdpose:/home/lishuang/Disk/github/docker/crowdpose nvidia/cuda:9.0-cudnn7-runtime-ubuntu16.04  /bin/bash
 
+
+docker container run --gpus all --rm -p 8444:3000 -it --ipc=host -v /home/lishuang/Disk/pytorch:/home/lishuang/Disk/pytorch pytorch/pytorch:1.6.0-cuda10.1-cudnn7-devel  /bin/bash
+
+
 #使用dockerfile创建镜像
 docker build -t 192.168.112.15:5000/algorithm/torch1.7-cuda10.1-cudnn7-devel:sparsercnn .
 
