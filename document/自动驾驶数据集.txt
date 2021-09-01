@@ -1,0 +1,71 @@
+麻省理工学院和丰田发布了自动驾驶数据集DriveSeg！
+agelab.mit.edu/driveseg
+DriveSeg (Manual).zip下载
+
+Waymo Open Dataset
+https://waymo.com/open/download/#
+Perception Dataset
+
+nuScenes by Aptiv
+https://www.nuscenes.org/
+
+Peking University/Baidu Apollo Scape
+http://apolloscape.auto/
+
+University of California BDD100K
+https://bdd-data.berkeley.edu/
+百度云
+
+UA-DETRAC
+https://detrac-db.rit.albany.edu/
+百度云
+
+CityScapes
+https://www.cityscapes-dataset.com/
+
+BIT-Cardata
+http://shujujishi.com/dataset/ff01a9be-f417-4e73-923b-1bc6408ee7aa.html
+百度云
+
+OpenData V11.0
+https://www.openits.cn/opendata4/748.jhtml
+百度云
+
+D²-City
+滴滴数据，网站现在上不去了
+百度云
+
+VeRi dataset
+百度云
+
+DeepRoute Open Dataset
+https://gas.graviti.cn/dataset/graviti-open-dataset/DeepRoute/download
+
+KITTI
+http://www.cvlibs.net/datasets/kitti/
+https://gas.graviti.cn/dataset/data-decorators/KITTIObject
+
+CCPD
+https://github.com/detectRecog/CCPD
+
+VehicleID
+https://www.pkuml.org/resources/pku-vehicleid.html
+
+CompCars
+http://mmlab.ie.cuhk.edu.hk/datasets/comp_cars/index.html
+
+Stanford Cars Dataset
+http://ai.stanford.edu/~jkrause/cars/car_dataset.html
+
+a2d2
+https://www.a2d2.audi/a2d2/en/download.html
+
+NYC3DCars数据集
+http://nyc3d.cs.cornell.edu/#download
+
+Boxy vehicle detection 数据集
+https://boxy-dataset.com/boxy/
+
+soda10m
+https://soda-2d.github.io/download.html#instructions
+下载标注文件5.6GB，未下载未标注文件2TB
